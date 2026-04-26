@@ -1,0 +1,150 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background-color: #fafafc;
+  color: #1b1b1d;
+  -webkit-font-smoothing: antialiased;
+  font-size: 15px;
+  line-height: 1.47;
+  letter-spacing: -0.012em;
+}
+
+::selection {
+  background-color: rgba(212, 212, 216, 0.45);
+  color: #1b1b1d;
+}
+
+@layer utilities {
+  .tabular-nums-date {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Structural fallbacks + defaults so the feed stays readable if utilities fail to load */
+.site-root {
+  position: relative;
+  min-height: 100vh;
+  background-color: #fafafc;
+  color: #1b1b1d;
+}
+
+.site-layer {
+  position: relative;
+  z-index: 10;
+  color: #1b1b1d;
+}
+
+.showcase-shell {
+  display: grid;
+  align-items: start;
+  align-content: start;
+  gap: 2.5rem;
+  width: 100%;
+  color: #1b1b1d;
+  border-radius: 1.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.55);
+  padding: 1.75rem;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.06),
+    0 1px 0 rgba(0, 0, 0, 0.03);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+}
+
+@media (min-width: 640px) {
+  .showcase-shell {
+    gap: 3.5rem;
+    padding: 2.5rem;
+  }
+}
+
+/* Column count at `lg` is controlled in `VideoShowcase` via Tailwind (one vs two feeds). */
+
+.showcase-col {
+  min-width: 0;
+}
+
+.showcase-row-btn {
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  gap: 1rem;
+  margin: 0;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  color: #1b1b1d;
+  padding: 0.625rem;
+  border-radius: 1rem;
+  box-sizing: border-box;
+}
+
+@media (min-width: 640px) {
+  .showcase-row-btn {
+    gap: 1.25rem;
+    padding: 0.75rem;
+  }
+}
+
+.showcase-row-btn--featured {
+  background-color: rgba(0, 0, 0, 0.04);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.showcase-thumb-yt {
+  position: relative;
+  flex-shrink: 0;
+  width: 134px;
+  height: 76px;
+  overflow: hidden;
+  border-radius: 0.65rem;
+  background-color: #f2f2f5;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.04);
+}
+
+@media (min-width: 640px) {
+  .showcase-thumb-yt {
+    width: 152px;
+    height: 86px;
+  }
+}
+
+.showcase-thumb-yt img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.showcase-thumb-tt {
+  position: relative;
+  flex-shrink: 0;
+  width: 52px;
+  height: 90px;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  background-color: #f2f2f5;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.04);
+}
+
+.showcase-thumb-tt img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
