@@ -29,6 +29,9 @@ export function youtubeEmbedSrc(
 export function tiktokEmbedSrc(videoId: string, autoplay: boolean): string {
   const params = new URLSearchParams();
   if (autoplay) params.set("autoplay", "1");
+  params.set("music_info", "1");
+  params.set("description", "1");
+  params.set("native_context_menu", "1");
   const q = params.toString();
-  return `https://www.tiktok.com/embed/v2/${videoId}${q ? `?${q}` : ""}`;
+  return `https://www.tiktok.com/player/v1/${videoId}${q ? `?${q}` : ""}`;
 }

@@ -25,5 +25,8 @@ export const DEFAULT_TIKTOK_FALLBACK_VIDEO_IDS = [
   "7492489411553201430",
 ] as const;
 
+// Pinned ambient background clip: "Treveth Lowen FPV Drone Flythrough".
+export const AMBIENT_YOUTUBE_VIDEO_ID = "edPQxfS2U28";
+
 export const YOUTUBE_CHANNEL_URL = "https://www.youtube.com/@fallow_fpv";
 export const FACEBOOK_URL = "https://www.facebook.com/FallowFPV";
