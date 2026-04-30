@@ -9,17 +9,28 @@ const inter = Inter({
   weight: ["400", "500", "600"],
 });
 
+const publicBasePath = process.env.NEXT_PUBLIC_BASE_PATH?.trim() || "";
+const publicAsset = (path: string) => `${publicBasePath}${path}`;
+
 export const metadata: Metadata = {
   title: "Fallow FPV — Drone pilot, UK",
   description:
     "FPV drone pilot and aerial filmmaker. Watch the latest flights and get in touch for commercial work.",
   icons: {
     icon: [
-      { url: "/fallow-favicon-32.png", type: "image/png", sizes: "32x32" },
-      { url: "/fallow-logo-180.png", type: "image/png", sizes: "180x180" },
+      {
+        url: publicAsset("/fallow-favicon-32.png"),
+        type: "image/png",
+        sizes: "32x32",
+      },
+      {
+        url: publicAsset("/fallow-logo-180.png"),
+        type: "image/png",
+        sizes: "180x180",
+      },
     ],
-    apple: [{ url: "/fallow-logo-180.png", sizes: "180x180" }],
-    shortcut: ["/fallow-favicon-32.png"],
+    apple: [{ url: publicAsset("/fallow-logo-180.png"), sizes: "180x180" }],
+    shortcut: [publicAsset("/fallow-favicon-32.png")],
   },
   openGraph: {
     title: "Fallow FPV",
