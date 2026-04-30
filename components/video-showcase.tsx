@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { VideoLightbox } from "@/components/video-lightbox";
+import { AMBIENT_YOUTUBE_VIDEO_ID } from "@/lib/site";
 import type { ShowcaseVideo } from "@/lib/types";
 import { formatPublishedDate, tiktokEmbedSrc } from "@/lib/video-embed";
 
@@ -25,10 +26,16 @@ export function VideoShowcase({ youtube, tiktok }: Props) {
   const [lightboxVideo, setLightboxVideo] = useState<ShowcaseVideo | null>(
     null
   );
+  const [lightboxQueue, setLightboxQueue] = useState<ShowcaseVideo[]>([]);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
   const [youtubeExtraPages, setYoutubeExtraPages] = useState(0);
   const [tiktokExtraPages, setTiktokExtraPages] = useState(0);
 
-  const closeLightbox = useCallback(() => setLightboxVideo(null), []);
+  const closeLightbox = useCallback(() => {
+    setLightboxVideo(null);
+    setLightboxQueue([]);
+    setLightboxIndex(0);
+  }, []);
 
   const tiktokPreview = safeTiktok[0];
   const tiktokList = tiktokPreview ? safeTiktok.slice(1) : safeTiktok;
@@ -64,14 +71,6 @@ export function VideoShowcase({ youtube, tiktok }: Props) {
     tiktokInitialCap + tiktokExtraPages * TIKTOK_LIST_PAGE_STEP
   );
 
-  if (!safeYoutube.length && !safeTiktok.length) {
-    return (
-      <p className="text-center text-[15px] text-ink-muted">
-        Videos are unavailable right now. Please try again shortly.
-      </p>
-    );
-  }
-
   const hasYoutube = safeYoutube.length > 0;
   const hasTiktok = safeTiktok.length > 0;
   const bothFeeds = hasYoutube && hasTiktok;
@@ -80,10 +79,55 @@ export function VideoShowcase({ youtube, tiktok }: Props) {
     ? "mt-6 flex min-h-0 flex-1 flex-col lg:min-h-0"
     : "mt-6 flex flex-col";
   const moreWrapClass = bothFeeds ? "mt-auto self-start pt-4" : "self-start pt-4";
+  const canGoPrev = lightboxVideo !== null && lightboxIndex > 0;
+  const canGoNext =
+    lightboxVideo !== null && lightboxIndex < lightboxQueue.length - 1;
+
+  const openLightboxFromQueue = useCallback(
+    (queue: ShowcaseVideo[], index: number) => {
+      if (!Array.isArray(queue) || queue.length === 0) return;
+      const bounded = Math.max(0, Math.min(index, queue.length - 1));
+      setLightboxQueue(queue);
+      setLightboxIndex(bounded);
+      setLightboxVideo(queue[bounded] ?? null);
+    },
+    []
+  );
+
+  const goPrevLightbox = useCallback(() => {
+    if (!canGoPrev) return;
+    const nextIndex = lightboxIndex - 1;
+    setLightboxIndex(nextIndex);
+    setLightboxVideo(lightboxQueue[nextIndex] ?? null);
+  }, [canGoPrev, lightboxIndex, lightboxQueue]);
+
+  const goNextLightbox = useCallback(() => {
+    if (!canGoNext) return;
+    const nextIndex = lightboxIndex + 1;
+    setLightboxIndex(nextIndex);
+    setLightboxVideo(lightboxQueue[nextIndex] ?? null);
+  }, [canGoNext, lightboxIndex, lightboxQueue]);
+
+  if (!safeYoutube.length && !safeTiktok.length) {
+    return (
+      <p className="text-center text-[15px] text-ink-muted">
+        Videos are unavailable right now. Please try again shortly.
+      </p>
+    );
+  }
 
   return (
     <div className="space-y-0">
-      <VideoLightbox video={lightboxVideo} onClose={closeLightbox} />
+      <VideoLightbox
+        video={lightboxVideo}
+        onClose={closeLightbox}
+        onPrev={goPrevLightbox}
+        onNext={goNextLightbox}
+        canPrev={canGoPrev}
+        canNext={canGoNext}
+        currentIndex={lightboxIndex}
+        totalCount={lightboxQueue.length}
+      />
 
       {(hasYoutube || hasTiktok) && (
         <section
@@ -100,19 +144,28 @@ export function VideoShowcase({ youtube, tiktok }: Props) {
             <div className={listStackLg}>
               {safeYoutube.length > 0 ? (
                 <ul className="flex flex-col gap-2">
-                  {safeYoutube.slice(0, youtubeVisibleCount).map((v, idx) => (
+                  {safeYoutube.slice(0, youtubeVisibleCount).map((v, idx) => {
+                    const isBackgroundClip = v.id === AMBIENT_YOUTUBE_VIDEO_ID;
+                    return (
                     <li
                       key={v.id}
                       className={
-                        idx === 0 ? "mb-1 border-b border-black/[0.08] pb-3" : ""
+                        isBackgroundClip
+                          ? "mb-1 border-b border-black/[0.08] pb-3"
+                          : ""
                       }
                     >
                       <button
                         type="button"
                         title={v.title}
-                        onClick={() => setLightboxVideo(v)}
+                        onClick={() =>
+                          openLightboxFromQueue(
+                            safeYoutube.slice(0, youtubeVisibleCount),
+                            idx
+                          )
+                        }
                         className={`showcase-row-btn group flex w-full gap-4 rounded-2xl p-2.5 text-left transition-colors duration-180 sm:gap-5 sm:p-3 ${
-                          idx === 0
+                          isBackgroundClip
                             ? "showcase-row-btn--featured bg-black/[0.04] ring-1 ring-black/[0.08] hover:bg-black/[0.055]"
                             : "hover:bg-black/[0.035]"
                         }`}
@@ -137,7 +190,7 @@ export function VideoShowcase({ youtube, tiktok }: Props) {
                           <span className="pointer-events-none absolute inset-0 bg-black/0 transition duration-180 group-hover:bg-black/[0.08]" />
                         </div>
                         <div className="min-w-0 flex-1 py-0.5">
-                          {idx === 0 ? (
+                          {isBackgroundClip ? (
                             <div className="mb-1.5 flex items-center gap-2">
                               <span className="inline-flex rounded-full bg-black/[0.06] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-ink-muted">
                                 Background clip
@@ -162,7 +215,8 @@ export function VideoShowcase({ youtube, tiktok }: Props) {
                         </div>
                       </button>
                     </li>
-                  ))}
+                    );
+                  })}
                 </ul>
               ) : (
                 <p className="text-[15px] leading-relaxed text-ink-muted">
@@ -197,7 +251,7 @@ export function VideoShowcase({ youtube, tiktok }: Props) {
                     <iframe
                       key={tiktokPreview.id}
                       title={tiktokPreview.title}
-                      src={tiktokEmbedSrc(tiktokPreview.id, true)}
+                      src={tiktokEmbedSrc(tiktokPreview.id, false)}
                       className="absolute inset-0 h-full w-full border-0"
                       allow="encrypted-media; fullscreen; autoplay; picture-in-picture"
                       allowFullScreen
@@ -232,12 +286,17 @@ export function VideoShowcase({ youtube, tiktok }: Props) {
             >
               {tiktokList.length > 0 ? (
                 <ul className="flex flex-col gap-3">
-                  {tiktokList.slice(0, tiktokVisibleCount).map((v) => (
+                  {tiktokList.slice(0, tiktokVisibleCount).map((v, idx) => (
                     <li key={v.id}>
                       <button
                         type="button"
                         title={v.title}
-                        onClick={() => setLightboxVideo(v)}
+                        onClick={() =>
+                          openLightboxFromQueue(
+                            tiktokList.slice(0, tiktokVisibleCount),
+                            idx
+                          )
+                        }
                         className="showcase-row-btn group flex w-full gap-3 rounded-2xl p-2 text-left transition-colors duration-180 hover:bg-black/[0.035] sm:gap-3.5 sm:p-2.5"
                       >
                         <div className="showcase-thumb-tt relative h-[90px] w-[52px] shrink-0 overflow-hidden rounded-[0.5rem] bg-canvas-subtle ring-1 ring-black/[0.04]">

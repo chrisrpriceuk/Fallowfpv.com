@@ -7,6 +7,7 @@ import { ContactForm } from "@/components/contact-form";
 import { VideoShowcase } from "@/components/video-showcase";
 import type { ShowcaseVideo } from "@/lib/types";
 import {
+  AMBIENT_YOUTUBE_VIDEO_ID,
   FACEBOOK_URL,
   TIKTOK_PROFILE_URL,
   YOUTUBE_CHANNEL_URL,
@@ -81,7 +82,10 @@ export default function HomePage() {
     };
   }, []);
 
-  const ambientVideoId = useMemo(() => feed.youtube[0]?.id ?? null, [feed.youtube]);
+  const ambientVideoId = useMemo(() => {
+    const pinned = feed.youtube.find((v) => v.id === AMBIENT_YOUTUBE_VIDEO_ID)?.id;
+    return pinned ?? AMBIENT_YOUTUBE_VIDEO_ID;
+  }, [feed.youtube]);
 
   return (
     <div className="site-root relative min-h-screen">
@@ -94,9 +98,20 @@ export default function HomePage() {
           <div className="mx-auto flex max-w-[84rem] items-center justify-between gap-8 px-5 py-4 sm:px-10">
             <Link
               href="/"
-              className="text-[17px] font-semibold tracking-[-0.022em] text-ink transition-opacity duration-180 hover:opacity-70"
+              className="inline-flex items-center gap-2 text-[17px] font-semibold tracking-[-0.022em] text-ink transition-opacity duration-180 hover:opacity-70"
             >
-              Chris - Fallow FPV
+              {/* eslint-disable-next-line @next/next/no-img-element -- static exported site logo from /public */}
+              <img
+                src="/fallow-favicon-32.png"
+                alt=""
+                aria-hidden
+                className="h-[1em] w-[1em] rounded-[3px] object-contain"
+                width={17}
+                height={17}
+                loading="eager"
+                decoding="async"
+              />
+              <span>Chris - Fallow FPV</span>
             </Link>
             <nav className="flex flex-wrap items-center justify-end gap-x-8 gap-y-2 text-[15px] font-medium tracking-[-0.012em] text-ink-muted">
               <a
@@ -124,13 +139,13 @@ export default function HomePage() {
           <section className="mx-auto max-w-[84rem] px-5 pb-14 pt-16 sm:px-10 sm:pt-24 sm:pb-20">
             <div className="mx-auto max-w-[44rem] text-center">
               <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-ink-faint">
-                FPV · United Kingdom
+                Professional Drone and FPV Pilot · United Kingdom
               </p>
               <h1 className="mt-5 text-[2.35rem] font-semibold leading-[1.07] tracking-[-0.036em] text-ink sm:text-[3.4rem] sm:leading-[1.04]">
                 Aerial vision, simply shown.
               </h1>
               <p className="mx-auto mt-6 max-w-[36rem] text-[19px] font-normal leading-[1.55] tracking-[-0.015em] text-ink-muted sm:text-[21px]">
-                Film, events, and creative work — CAA certified.
+                FPV and drone filming for events, venues, brands, and private clients — CAA certified.
               </p>
             </div>
           </section>

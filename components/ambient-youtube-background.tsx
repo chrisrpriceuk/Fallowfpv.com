@@ -22,7 +22,7 @@ export function AmbientYouTubeBackground({ videoId }: { videoId: string }) {
       }}
     >
       <div
-        className="absolute left-1/2 top-1/2 h-[56.25vw] min-h-full w-[177.78vh] min-w-full -translate-x-1/2 -translate-y-1/2 opacity-[0.28]"
+        className="absolute left-1/2 top-1/2 h-[56.25vw] min-h-full w-[177.78vh] min-w-full -translate-x-1/2 -translate-y-1/2 opacity-[0.46]"
         style={{
           position: "absolute",
           left: "50%",
@@ -32,7 +32,7 @@ export function AmbientYouTubeBackground({ videoId }: { videoId: string }) {
           height: "100vh",
           minWidth: "100%",
           minHeight: "56.25vw",
-          opacity: 0.28,
+          opacity: 0.46,
         }}
       >
         <iframe
@@ -43,13 +43,13 @@ export function AmbientYouTubeBackground({ videoId }: { videoId: string }) {
         />
       </div>
       <div
-        className="absolute inset-0 bg-gradient-to-b from-canvas/92 via-canvas/[0.82] to-canvas"
+        className="absolute inset-0 bg-gradient-to-b from-canvas/[0.72] via-canvas/[0.5] to-canvas/[0.82]"
         style={{
           position: "absolute",
           inset: 0,
           pointerEvents: "none",
           background:
-            "linear-gradient(to bottom, rgba(250,250,252,0.92) 0%, rgba(250,250,252,0.82) 45%, rgb(250,250,252) 100%)",
+            "linear-gradient(to bottom, rgba(250,250,252,0.72) 0%, rgba(250,250,252,0.5) 45%, rgba(250,250,252,0.82) 100%)",
         }}
       />
     </div>
