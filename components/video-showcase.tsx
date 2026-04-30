@@ -13,9 +13,9 @@ type Props = {
 const sectionLabel =
   "text-[12px] font-semibold uppercase tracking-[0.2em] text-ink-muted";
 
-/** Rows below the TikTok preview: keep the column short; "More" adds this many each time. */
-const TIKTOK_LIST_INITIAL_MAX = 4;
-const TIKTOK_LIST_PAGE_STEP = 4;
+/** Rows below the TikTok preview: keep balance with YouTube without truncating too hard. */
+const TIKTOK_LIST_INITIAL_MAX = 10;
+const TIKTOK_LIST_PAGE_STEP = 8;
 
 /** Two columns at `lg`: each stack flows independently (no shared-row spacer). */
 export function VideoShowcase({ youtube, tiktok }: Props) {

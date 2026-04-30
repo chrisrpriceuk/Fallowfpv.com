@@ -13,6 +13,7 @@ const TIKTOK_JSON_URL =
   "https://raw.githubusercontent.com/chrisrpriceuk/feed/main/tiktok-feed.json";
 const MAX_ITEMS = Number(process.env.SHOWCASE_MAX_ITEMS || "24");
 const OUT_PATH = resolve(process.cwd(), "public", "showcase-feed.json");
+const OEMBED_BATCH_LIMIT = Number(process.env.TIKTOK_OEMBED_MAX || "24");
 
 function normalizeArray(v) {
   if (!v) return [];
@@ -22,6 +23,62 @@ function normalizeArray(v) {
 function parseDate(input) {
   const d = new Date(String(input ?? "").trim());
   return Number.isNaN(d.getTime()) ? "" : d.toISOString();
+}
+
+function thumbnailExpiresAtEpoch(thumbnailUrl) {
+  if (!thumbnailUrl) return 0;
+  try {
+    const u = new URL(thumbnailUrl);
+    const exp = Number(u.searchParams.get("x-expires") || "0");
+    return Number.isFinite(exp) ? exp : 0;
+  } catch {
+    return 0;
+  }
+}
+
+function isThumbnailLikelyExpiredOrNearExpiry(thumbnailUrl) {
+  const expEpoch = thumbnailExpiresAtEpoch(thumbnailUrl);
+  if (!expEpoch) return false;
+  const nowEpoch = Math.floor(Date.now() / 1000);
+  // Refresh if already expired or will expire in under 3 days.
+  return expEpoch - nowEpoch < 3 * 24 * 60 * 60;
+}
+
+async function enrichTikTokThumbnail(video) {
+  try {
+    const oembedUrl = `https://www.tiktok.com/oembed?url=${encodeURIComponent(video.watchUrl)}`;
+    const res = await fetch(oembedUrl, {
+      headers: {
+        Accept: "application/json",
+        "User-Agent":
+          "Mozilla/5.0 (compatible; FallowFPV/1.0; +https://fallowfpv.com)",
+      },
+    });
+    if (!res.ok) return video;
+    const data = await res.json();
+    const nextThumb = String(data?.thumbnail_url || "").trim();
+    if (!nextThumb) return video;
+    return { ...video, thumbnailUrl: nextThumb };
+  } catch {
+    return video;
+  }
+}
+
+async function refreshTikTokThumbnails(videos) {
+  const out = [];
+  let refreshed = 0;
+  for (const video of videos) {
+    if (
+      refreshed < OEMBED_BATCH_LIMIT &&
+      (isThumbnailLikelyExpiredOrNearExpiry(video.thumbnailUrl) || !video.thumbnailUrl)
+    ) {
+      out.push(await enrichTikTokThumbnail(video));
+      refreshed += 1;
+      continue;
+    }
+    out.push(video);
+  }
+  return out;
 }
 
 function pickYoutubeThumb(entry, videoId) {
@@ -100,7 +157,7 @@ async function fetchTiktokVideos() {
       const parsed = await remote.json();
       const videos = normalizeArray(parsed?.videos);
       if (videos.length > 0) {
-        return videos
+        const normalized = videos
           .map((v) => ({
             platform: "tiktok",
             id: String(v?.id || "").trim(),
@@ -111,6 +168,7 @@ async function fetchTiktokVideos() {
           }))
           .filter((v) => v.id && v.watchUrl)
           .slice(0, MAX_ITEMS);
+        return refreshTikTokThumbnails(normalized);
       }
     }
   } catch {
@@ -122,7 +180,7 @@ async function fetchTiktokVideos() {
     const raw = await readFile(localPath, "utf8");
     const parsed = JSON.parse(raw);
     const videos = normalizeArray(parsed?.videos);
-    return videos
+    const normalized = videos
       .map((v) => ({
         platform: "tiktok",
         id: String(v?.id || "").trim(),
@@ -133,6 +191,7 @@ async function fetchTiktokVideos() {
       }))
       .filter((v) => v.id && v.watchUrl)
       .slice(0, MAX_ITEMS);
+    return refreshTikTokThumbnails(normalized);
   } catch {
     return [];
   }
