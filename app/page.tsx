@@ -19,6 +19,9 @@ const social = [
   { label: "Facebook", href: FACEBOOK_URL },
 ] as const;
 
+const publicBasePath = process.env.NEXT_PUBLIC_BASE_PATH?.trim() || "";
+const publicAsset = (path: string) => `${publicBasePath}${path}`;
+
 type ClientFeed = {
   youtube: ShowcaseVideo[];
   tiktok: ShowcaseVideo[];
@@ -102,7 +105,7 @@ export default function HomePage() {
             >
               {/* eslint-disable-next-line @next/next/no-img-element -- static exported site logo from /public */}
               <img
-                src="/fallow-favicon-32.png"
+                src={publicAsset("/fallow-favicon-32.png")}
                 alt=""
                 aria-hidden
                 className="h-[1em] w-[1em] rounded-[3px] object-contain"
