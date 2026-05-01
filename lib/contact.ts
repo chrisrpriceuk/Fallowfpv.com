@@ -2,6 +2,7 @@ export type ContactFormPayload = {
   name: string;
   email: string;
   project?: string;
+  date?: string;
   message: string;
   company?: string; // honeypot
 };
@@ -14,6 +15,7 @@ export function normalizeContactPayload(
     name: String(r.name ?? "").trim(),
     email: String(r.email ?? "").trim(),
     project: String(r.project ?? "").trim(),
+    date: String(r.date ?? "").trim(),
     message: String(r.message ?? "").trim(),
     company: String(r.company ?? "").trim(),
   };
@@ -31,6 +33,9 @@ export function validateContactPayload(payload: ContactFormPayload): string | nu
   }
   if (payload.project && payload.project.length > 240) {
     return "Project field is too long.";
+  }
+  if (payload.date && !/^\d{4}-\d{2}-\d{2}$/.test(payload.date)) {
+    return "Please provide a valid date.";
   }
   if (payload.message.length < 10) return "Message is too short.";
   if (payload.message.length > 5000) return "Message is too long.";

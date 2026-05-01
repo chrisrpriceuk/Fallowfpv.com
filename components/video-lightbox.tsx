@@ -75,7 +75,7 @@ export function VideoLightbox({
         aria-label="Close video"
       />
       <div
-        className="relative z-10 flex max-h-[min(92vh,900px)] w-full max-w-[min(100%,920px)] flex-col overflow-hidden rounded-[1.35rem] bg-canvas/95 shadow-lift ring-1 ring-black/[0.06] backdrop-blur-xl"
+        className="relative z-10 flex max-h-[min(92vh,900px)] w-full max-w-[min(100%,920px)] flex-col overflow-hidden rounded-[1.35rem] bg-canvas/95 shadow-lift ring-1 ring-ink/10 backdrop-blur-xl"
       >
         <div
           className={`relative bg-black ${
@@ -147,13 +147,13 @@ export function VideoLightbox({
             </div>
           )}
         </div>
-        <div className="border-t border-black/[0.045] px-5 py-4 sm:px-7 sm:py-5">
+        <div className="border-t border-ink/10 px-5 py-4 sm:px-7 sm:py-5">
           <div className="flex items-center justify-between gap-3">
             <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-ink-faint">
               {isYt ? "YouTube" : "TikTok"}
             </span>
             {totalCount > 1 ? (
-              <span className="rounded-full bg-black/[0.045] px-2.5 py-1 text-[11px] font-medium tabular-nums text-ink-muted">
+              <span className="rounded-full bg-ink/10 px-2.5 py-1 text-[11px] font-medium tabular-nums text-ink-muted">
                 {currentIndex + 1} / {totalCount}
               </span>
             ) : null}

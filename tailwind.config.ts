@@ -22,18 +22,18 @@ const config: Config = {
       },
       colors: {
         ink: {
-          DEFAULT: "#1b1b1d",
-          muted: "#5c5c61",
-          faint: "#8e8e93",
+          DEFAULT: "rgb(var(--color-ink) / <alpha-value>)",
+          muted: "rgb(var(--color-ink-muted) / <alpha-value>)",
+          faint: "rgb(var(--color-ink-faint) / <alpha-value>)",
         },
         canvas: {
-          DEFAULT: "#fafafc",
-          subtle: "#f2f2f5",
+          DEFAULT: "rgb(var(--color-canvas) / <alpha-value>)",
+          subtle: "rgb(var(--color-canvas-subtle) / <alpha-value>)",
         },
         /** Distinct from Apple’s link blue; still calm and readable */
         link: {
-          DEFAULT: "#1b61c8",
-          hover: "#154a9a",
+          DEFAULT: "rgb(var(--color-link) / <alpha-value>)",
+          hover: "rgb(var(--color-link-hover) / <alpha-value>)",
         },
       },
       boxShadow: {

@@ -58,6 +58,7 @@ export default function HomePage() {
   const [feed, setFeed] = useState<ClientFeed>({ youtube: [], tiktok: [] });
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isArticleModalOpen, setIsArticleModalOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -92,6 +93,10 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
+    setIsDarkMode(localStorage.getItem("fallow-theme") === "dark");
+  }, []);
+
+  useEffect(() => {
     if (!isContactModalOpen && !isArticleModalOpen) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -113,14 +118,22 @@ export default function HomePage() {
     return pinned ?? AMBIENT_YOUTUBE_VIDEO_ID;
   }, [feed.youtube]);
 
+  const toggleTheme = () => {
+    setIsDarkMode((current) => {
+      const next = !current;
+      localStorage.setItem("fallow-theme", next ? "dark" : "light");
+      return next;
+    });
+  };
+
   return (
-    <div className="site-root relative min-h-screen">
+    <div className={`site-root relative min-h-screen ${isDarkMode ? "theme-dark" : ""}`}>
       {ambientVideoId ? (
-        <AmbientYouTubeBackground videoId={ambientVideoId} />
+        <AmbientYouTubeBackground videoId={ambientVideoId} isDark={isDarkMode} />
       ) : null}
 
       <div className="site-layer relative z-10">
-        <header className="sticky top-0 z-20 border-b border-black/[0.045] bg-canvas/80 backdrop-blur-2xl backdrop-saturate-150">
+        <header className="sticky top-0 z-20 border-b border-ink/10 bg-canvas/80 backdrop-blur-2xl backdrop-saturate-150">
           <div className="mx-auto flex max-w-[84rem] items-center justify-between gap-8 px-5 py-4 sm:px-10">
             <Link
               href="/"
@@ -165,12 +178,40 @@ export default function HomePage() {
                   {s.label}
                 </a>
               ))}
+              <button
+                type="button"
+                className="relative inline-flex h-8 w-[5.25rem] items-center rounded-full border border-ink/10 bg-canvas/75 p-1 text-[11px] font-semibold text-ink shadow-soft transition duration-180 hover:bg-canvas-subtle"
+                onClick={toggleTheme}
+                aria-pressed={isDarkMode}
+                aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+              >
+                <span
+                  className={`absolute left-2.5 z-10 transition-colors duration-180 ${
+                    isDarkMode ? "text-ink-muted" : "text-canvas"
+                  }`}
+                >
+                  Light
+                </span>
+                <span
+                  className={`absolute right-2.5 z-10 transition-colors duration-180 ${
+                    isDarkMode ? "text-canvas" : "text-ink-muted"
+                  }`}
+                >
+                  Dark
+                </span>
+                <span
+                  aria-hidden
+                  className={`relative z-0 h-6 w-[2.35rem] rounded-full bg-ink transition-transform duration-180 ${
+                    isDarkMode ? "translate-x-[2.15rem]" : "translate-x-0"
+                  }`}
+                />
+              </button>
             </nav>
           </div>
         </header>
 
         <main>
-          <section className="mx-auto max-w-[84rem] px-5 pb-14 pt-16 sm:px-10 sm:pt-24 sm:pb-20">
+          <section className="mx-auto max-w-[84rem] px-5 pb-8 pt-16 sm:px-10 sm:pt-24 sm:pb-10">
             <div className="mx-auto max-w-[44rem] text-center">
               <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-ink-faint">
                 Professional Drone and FPV Pilot · United Kingdom
@@ -179,12 +220,24 @@ export default function HomePage() {
                 Aerial vision, simply shown
               </h1>
               <p className="mx-auto mt-6 max-w-[36rem] text-[19px] font-normal leading-[1.55] tracking-[-0.015em] text-ink-muted sm:text-[21px]">
-                FPV and drone filming for events, venues, brands, and private clients — CAA certified
+                FPV and drone filming for events, venues, brands,{" "}
+                <span className="whitespace-nowrap">
+                  and private clients — CAA certified
+                </span>
               </p>
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setIsContactModalOpen(true)}
+                  className="rounded-full border border-ink/15 bg-canvas/70 px-5 py-2.5 text-[14px] font-semibold text-ink backdrop-blur-md transition hover:bg-canvas-subtle"
+                >
+                  Plan a shoot
+                </button>
+              </div>
             </div>
           </section>
 
-          <div className="mx-auto max-w-[84rem] px-5 pb-20 sm:px-10">
+          <div id="work" className="mx-auto max-w-[84rem] px-5 pb-20 sm:px-10">
             <VideoShowcase youtube={feed.youtube} tiktok={feed.tiktok} />
           </div>
 
@@ -208,7 +261,7 @@ export default function HomePage() {
               <button
                 type="button"
                 onClick={() => setIsContactModalOpen(false)}
-                className="absolute right-3 top-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-black/20 text-[18px] leading-none text-white backdrop-blur-md transition-colors duration-180 hover:bg-black/30"
+                className="absolute right-3 top-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-black/30 text-[18px] leading-none text-white backdrop-blur-md transition-colors duration-180 hover:bg-black/45"
                 aria-label="Close"
               >
                 ×
@@ -231,11 +284,11 @@ export default function HomePage() {
               onClick={() => setIsArticleModalOpen(false)}
               aria-label="Close article"
             />
-            <div className="relative z-10 max-h-[92vh] w-full max-w-[min(100%,980px)] overflow-auto rounded-[1.35rem] border border-white/40 bg-canvas/95 p-7 shadow-lift backdrop-blur-xl sm:p-10">
+            <div className="relative z-10 max-h-[92vh] w-full max-w-[min(100%,980px)] overflow-auto rounded-[1.35rem] border border-ink/10 bg-canvas/95 p-7 shadow-lift backdrop-blur-xl sm:p-10">
               <button
                 type="button"
                 onClick={() => setIsArticleModalOpen(false)}
-                className="absolute right-3 top-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-black/20 text-[18px] leading-none text-white backdrop-blur-md transition-colors duration-180 hover:bg-black/30"
+                className="absolute right-3 top-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-black/30 text-[18px] leading-none text-white backdrop-blur-md transition-colors duration-180 hover:bg-black/45"
                 aria-label="Close"
               >
                 ×
@@ -262,7 +315,7 @@ export default function HomePage() {
                 </p>
               </div>
 
-              <div className="mt-6 grid items-center gap-5 rounded-2xl border border-black/[0.06] bg-white/55 p-5 sm:grid-cols-2 sm:p-6">
+              <div className="mt-6 grid items-center gap-5 rounded-2xl border border-ink/10 bg-canvas-subtle/65 p-5 sm:grid-cols-2 sm:p-6">
                 <div>
                   <p className="text-[14px] font-medium text-ink">
                     Examples of FPV pilot names:
@@ -337,7 +390,7 @@ export default function HomePage() {
           </a>
         </div>
 
-        <footer className="mt-2 border-t border-black/[0.045] bg-canvas/65 backdrop-blur-md">
+        <footer className="mt-2 border-t border-ink/10 bg-canvas/65 backdrop-blur-md">
           <div className="mx-auto flex max-w-[84rem] flex-col items-center gap-4 px-5 py-12 text-[14px] tracking-[-0.006em] text-ink-faint sm:flex-row sm:justify-between sm:px-10">
             <span>© {new Date().getFullYear()} Fallow FPV</span>
             <span className="tabular-nums-date sm:text-right">
