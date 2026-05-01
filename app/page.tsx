@@ -56,6 +56,7 @@ function normalizeFeedVideos(
 
 export default function HomePage() {
   const [feed, setFeed] = useState<ClientFeed>({ youtube: [], tiktok: [] });
+  const [isFeedLoading, setIsFeedLoading] = useState(true);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isArticleModalOpen, setIsArticleModalOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -83,6 +84,8 @@ export default function HomePage() {
         });
       } catch {
         if (!cancelled) setFeed({ youtube: [], tiktok: [] });
+      } finally {
+        if (!cancelled) setIsFeedLoading(false);
       }
     }
 
@@ -238,7 +241,11 @@ export default function HomePage() {
           </section>
 
           <div id="work" className="mx-auto max-w-[84rem] px-5 pb-20 sm:px-10">
-            <VideoShowcase youtube={feed.youtube} tiktok={feed.tiktok} />
+            <VideoShowcase
+              youtube={feed.youtube}
+              tiktok={feed.tiktok}
+              isLoading={isFeedLoading}
+            />
           </div>
 
           <ContactForm />

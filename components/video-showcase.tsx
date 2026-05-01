@@ -9,6 +9,7 @@ import { formatPublishedDate, tiktokEmbedSrc } from "@/lib/video-embed";
 type Props = {
   youtube: ShowcaseVideo[];
   tiktok: ShowcaseVideo[];
+  isLoading?: boolean;
 };
 
 const sectionLabel =
@@ -19,7 +20,7 @@ const TIKTOK_LIST_INITIAL_MAX = 10;
 const TIKTOK_LIST_PAGE_STEP = 8;
 
 /** Two columns at `lg`: each stack flows independently (no shared-row spacer). */
-export function VideoShowcase({ youtube, tiktok }: Props) {
+export function VideoShowcase({ youtube, tiktok, isLoading = false }: Props) {
   const safeYoutube = Array.isArray(youtube) ? youtube : [];
   const safeTiktok = Array.isArray(tiktok) ? tiktok : [];
 
@@ -107,6 +108,34 @@ export function VideoShowcase({ youtube, tiktok }: Props) {
     setLightboxIndex(nextIndex);
     setLightboxVideo(lightboxQueue[nextIndex] ?? null);
   }, [canGoNext, lightboxIndex, lightboxQueue]);
+
+  if (isLoading && !safeYoutube.length && !safeTiktok.length) {
+    return (
+      <section
+        className="showcase-shell grid content-start items-start gap-12 rounded-[1.75rem] border border-ink/10 bg-canvas/70 p-7 shadow-card backdrop-blur-2xl sm:gap-14 sm:p-10 lg:grid-cols-2 lg:items-stretch lg:gap-x-14 lg:gap-y-0"
+        aria-label="Video library loading"
+      >
+        <div className="flex min-w-0 flex-col">
+          <h3 className={sectionLabel}>YouTube</h3>
+          <div className="mt-6 space-y-3">
+            <div className="h-[102px] animate-pulse rounded-2xl bg-ink/6" />
+            <div className="h-[102px] animate-pulse rounded-2xl bg-ink/6" />
+            <div className="h-[102px] animate-pulse rounded-2xl bg-ink/6" />
+            <div className="h-[102px] animate-pulse rounded-2xl bg-ink/6" />
+          </div>
+        </div>
+        <div className="flex min-w-0 flex-col">
+          <h3 className={sectionLabel}>TikTok</h3>
+          <div className="mt-6 mx-auto h-[420px] w-full max-w-[300px] animate-pulse rounded-[1.35rem] bg-ink/8" />
+          <div className="mt-8 space-y-3">
+            <div className="h-[82px] animate-pulse rounded-2xl bg-ink/6" />
+            <div className="h-[82px] animate-pulse rounded-2xl bg-ink/6" />
+            <div className="h-[82px] animate-pulse rounded-2xl bg-ink/6" />
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   if (!safeYoutube.length && !safeTiktok.length) {
     return (
