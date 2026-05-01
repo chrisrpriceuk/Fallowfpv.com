@@ -273,7 +273,7 @@ export default function HomePage() {
 
         {isArticleModalOpen ? (
           <div
-            className="fixed inset-0 z-[110] flex items-center justify-center p-4 sm:p-8"
+            className="fixed inset-0 z-[110] flex items-start justify-center overflow-y-auto p-3 py-5 sm:p-8"
             role="dialog"
             aria-modal="true"
             aria-label="FPV pilot names article"
@@ -284,21 +284,22 @@ export default function HomePage() {
               onClick={() => setIsArticleModalOpen(false)}
               aria-label="Close article"
             />
-            <div className="relative z-10 max-h-[92vh] w-full max-w-[min(100%,980px)] overflow-auto rounded-[1.35rem] border border-ink/10 bg-canvas/95 p-7 shadow-lift backdrop-blur-xl sm:p-10">
+            <div className="relative z-10 w-full max-w-[min(100%,980px)] pb-6">
               <button
                 type="button"
                 onClick={() => setIsArticleModalOpen(false)}
-                className="absolute right-3 top-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-black/30 text-[18px] leading-none text-white backdrop-blur-md transition-colors duration-180 hover:bg-black/45"
+                className="sticky left-full top-3 z-[120] -mb-8 mr-3 flex h-8 w-8 -translate-x-3 items-center justify-center rounded-full bg-black/30 text-[18px] leading-none text-white backdrop-blur-md transition-colors duration-180 hover:bg-black/45"
                 aria-label="Close"
               >
                 ×
               </button>
-              <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-ink-faint">
-                Behind the Name
-              </p>
-              <h2 className="mt-3 max-w-[50rem] text-[1.85rem] font-semibold leading-[1.12] tracking-[-0.03em] text-ink sm:text-[2.25rem]">
-                The Impact of FPV Pilot Names: Meet Fallow FPV and Others
-              </h2>
+              <div className="rounded-[1.35rem] border border-ink/10 bg-canvas/95 p-7 shadow-lift backdrop-blur-xl sm:p-10">
+                <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-ink-faint">
+                  Behind the Name
+                </p>
+                <h2 className="mt-3 max-w-[50rem] text-[1.85rem] font-semibold leading-[1.12] tracking-[-0.03em] text-ink sm:text-[2.25rem]">
+                  The Impact of FPV Pilot Names: Meet Fallow FPV and Others
+                </h2>
 
               <div className="mt-6 space-y-4 text-[16px] leading-[1.65] text-ink-muted">
                 <p>
@@ -354,6 +355,7 @@ export default function HomePage() {
                   captivated Chris with its majestic presence. His aspiration is
                   for his flights to mirror the elegance of these creatures.
                 </p>
+              </div>
               </div>
             </div>
           </div>
