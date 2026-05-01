@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { trackEvent } from "@/lib/analytics";
 import { normalizeContactPayload, type ContactFormPayload } from "@/lib/contact";
 
 type Status = "idle" | "submitting" | "success" | "error";
@@ -81,12 +82,21 @@ export function ContactForm({
             } as Partial<ContactFormPayload>);
 
             if (!webhookUrl) {
+              trackEvent("contact_submit_error", {
+                location: variant,
+                reason: "missing_webhook_url",
+              });
               setStatus("error");
               setError("Contact endpoint is not configured yet.");
               return;
             }
 
             try {
+              trackEvent("contact_submit_attempt", {
+                location: variant,
+                has_project: Boolean(payload.project),
+                has_date: Boolean(payload.date),
+              });
               const res = await fetch(webhookUrl, {
                 method: "POST",
                 headers: { "content-type": "application/json" },
@@ -102,14 +112,24 @@ export function ContactForm({
                 mode: "cors",
               });
               if (!res.ok) {
+                trackEvent("contact_submit_error", {
+                  location: variant,
+                  reason: "non_ok_response",
+                  status: res.status,
+                });
                 setStatus("error");
                 setError("Could not send your message.");
                 return;
               }
 
               form.reset();
+              trackEvent("contact_submit_success", { location: variant });
               setStatus("success");
             } catch {
+              trackEvent("contact_submit_error", {
+                location: variant,
+                reason: "network_or_cors",
+              });
               setStatus("error");
               setError("Could not send your message.");
             }

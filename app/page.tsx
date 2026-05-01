@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { AmbientYouTubeBackground } from "@/components/ambient-youtube-background";
 import { ContactForm } from "@/components/contact-form";
 import { VideoShowcase } from "@/components/video-showcase";
+import { trackEvent } from "@/lib/analytics";
 import type { ShowcaseVideo } from "@/lib/types";
 import {
   AMBIENT_YOUTUBE_VIDEO_ID,
@@ -125,6 +126,7 @@ export default function HomePage() {
     setIsDarkMode((current) => {
       const next = !current;
       localStorage.setItem("fallow-theme", next ? "dark" : "light");
+      trackEvent("theme_toggle", { mode: next ? "dark" : "light" });
       return next;
     });
   };
@@ -159,14 +161,20 @@ export default function HomePage() {
               <button
                 type="button"
                 className="transition-opacity duration-180 hover:opacity-70"
-                onClick={() => setIsContactModalOpen(true)}
+                onClick={() => {
+                  trackEvent("open_contact_modal", { source: "header" });
+                  setIsContactModalOpen(true);
+                }}
               >
                 Contact
               </button>
               <button
                 type="button"
                 className="transition-opacity duration-180 hover:opacity-70"
-                onClick={() => setIsArticleModalOpen(true)}
+                onClick={() => {
+                  trackEvent("open_behind_the_name_modal", { source: "header" });
+                  setIsArticleModalOpen(true);
+                }}
               >
                 Behind the Name
               </button>
@@ -177,6 +185,12 @@ export default function HomePage() {
                   href={s.href}
                   target="_blank"
                   rel="noreferrer noopener"
+                  onClick={() =>
+                    trackEvent("social_link_click", {
+                      platform: s.label.toLowerCase(),
+                      location: "header",
+                    })
+                  }
                 >
                   {s.label}
                 </a>
@@ -231,7 +245,10 @@ export default function HomePage() {
               <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
                 <button
                   type="button"
-                  onClick={() => setIsContactModalOpen(true)}
+                  onClick={() => {
+                    trackEvent("open_contact_modal", { source: "hero_cta" });
+                    setIsContactModalOpen(true);
+                  }}
                   className="rounded-full border border-ink/15 bg-canvas/70 px-5 py-2.5 text-[14px] font-semibold text-ink backdrop-blur-md transition hover:bg-canvas-subtle"
                 >
                   Plan a shoot
@@ -387,6 +404,10 @@ export default function HomePage() {
             aria-label="View A2 CofC certificate badge"
             onClick={(e) => {
               e.preventDefault();
+              trackEvent("outbound_link_click", {
+                destination: "uavhub",
+                location: "footer_badge",
+              });
               window.open(A2COFC_BADGE_HREF, "_blank", "noopener,noreferrer");
             }}
           >
