@@ -134,25 +134,25 @@ export default function HomePage() {
 
       <div className="site-layer relative z-10">
         <header className="sticky top-0 z-20 border-b border-ink/10 bg-canvas/80 backdrop-blur-2xl backdrop-saturate-150">
-          <div className="mx-auto flex max-w-[84rem] flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-8 sm:px-10">
+          <div className="mx-auto flex max-w-[84rem] flex-col gap-3 px-5 py-4 xl:flex-row xl:items-end xl:justify-between xl:gap-8 sm:px-10">
             <Link
               href="/"
-              className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-[16px] font-semibold tracking-[-0.022em] text-ink transition-opacity duration-180 hover:opacity-70 sm:justify-start sm:text-[17px]"
+              className="inline-flex items-end justify-center gap-3 whitespace-nowrap text-[26px] font-semibold tracking-[-0.04em] text-ink transition-opacity duration-180 hover:opacity-70 sm:text-[30px] lg:text-[34px] xl:justify-start"
             >
               {/* eslint-disable-next-line @next/next/no-img-element -- static exported site logo from /public */}
               <img
-                src={publicAsset("/fallow-favicon-32.png")}
+                src={publicAsset(FALLOW_BRAND_LOGO_ASSET)}
                 alt=""
                 aria-hidden
-                className="h-[1em] w-[1em] rounded-[3px] object-contain"
-                width={17}
-                height={17}
+                className="h-[68px] w-[68px] rounded-[8px] object-contain"
+                width={68}
+                height={68}
                 loading="eager"
                 decoding="async"
               />
-              <span>Chris - Fallow FPV</span>
+              <span className="pb-1 leading-none">Chris - Fallow FPV</span>
             </Link>
-            <nav className="grid grid-cols-2 items-center gap-x-5 gap-y-2 text-center text-[14px] font-medium tracking-[-0.012em] text-ink-muted sm:flex sm:flex-wrap sm:justify-end sm:gap-x-8 sm:text-[15px]">
+            <nav className="grid grid-cols-2 items-center gap-x-5 gap-y-2 text-center text-[14px] font-medium tracking-[-0.012em] text-ink-muted sm:grid-cols-3 sm:text-[15px] xl:flex xl:flex-wrap xl:justify-end xl:gap-x-8">
               <button
                 type="button"
                 className="transition-opacity duration-180 hover:opacity-70"
@@ -180,7 +180,7 @@ export default function HomePage() {
               ))}
               <button
                 type="button"
-                className="relative mx-auto inline-flex h-8 w-[5.25rem] items-center rounded-full border border-ink/10 bg-canvas/75 p-1 text-[11px] font-semibold text-ink shadow-soft transition duration-180 hover:bg-canvas-subtle sm:mx-0"
+                className="relative mx-auto inline-flex h-8 w-[5.25rem] items-center rounded-full border border-ink/10 bg-canvas/75 p-1 text-[11px] font-semibold text-ink shadow-soft transition duration-180 hover:bg-canvas-subtle xl:mx-0"
                 onClick={toggleTheme}
                 aria-pressed={isDarkMode}
                 aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
