@@ -27,18 +27,24 @@ function getYouTubeFeedUrl(): string {
 function pickThumbnail(entry: Record<string, unknown>): string | undefined {
   const group = entry["media:group"] as Record<string, unknown> | undefined;
   const thumb = group?.["media:thumbnail"];
-  if (Array.isArray(thumb)) {
-    const best = thumb.reduce(
-      (a: { "@_width"?: string }, b: { "@_width"?: string }) =>
-        Number(b["@_width"] ?? 0) > Number(a["@_width"] ?? 0) ? b : a,
-      thumb[0] as { "@_url"?: string }
-    );
-    return best?.["@_url"];
-  }
-  if (thumb && typeof thumb === "object") {
-    return (thumb as { "@_url"?: string })["@_url"];
-  }
-  return undefined;
+  const list = Array.isArray(thumb)
+    ? thumb
+    : thumb && typeof thumb === "object"
+      ? [thumb]
+      : [];
+  const sized = list
+    .map((t) => ({
+      w: Number((t as { "@_width"?: string })["@_width"] ?? 0),
+      url: String((t as { "@_url"?: string })["@_url"] ?? "").trim(),
+    }))
+    .filter((t) => t.url.length > 0);
+  if (sized.length === 0) return undefined;
+  const smallEnough = sized.filter((t) => t.w > 0 && t.w <= 480);
+  const pick =
+    smallEnough.length > 0
+      ? smallEnough.sort((a, b) => b.w - a.w)[0]
+      : sized.sort((a, b) => a.w - b.w || a.url.length - b.url.length)[0];
+  return pick?.url;
 }
 
 function getAlternateHref(entry: Record<string, unknown>): string | undefined {
@@ -127,9 +133,7 @@ export async function fetchChannelVideos(): Promise<{
 
     const thumbnailUrl =
       pickThumbnail(entry) ??
-      (videoId
-        ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`
-        : "");
+      (videoId ? `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg` : "");
 
     return {
       id: videoId,

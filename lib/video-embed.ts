@@ -35,3 +35,29 @@ export function tiktokEmbedSrc(videoId: string, autoplay: boolean): string {
   const q = params.toString();
   return `https://www.tiktok.com/player/v1/${videoId}${q ? `?${q}` : ""}`;
 }
+
+/** Prefer smaller YouTube stills for list thumbnails (saves bandwidth on mobile). */
+export function youtubeThumbnailDisplayUrl(thumbnailUrl: string): string {
+  if (!thumbnailUrl) return "";
+  try {
+    const u = new URL(thumbnailUrl);
+    if (!u.hostname.includes("ytimg.com") || !u.pathname.includes("/vi/")) {
+      return thumbnailUrl;
+    }
+    const nextPath = u.pathname.replace(
+      /\/(maxresdefault|sddefault|hqdefault)\.jpg$/i,
+      "/mqdefault.jpg"
+    );
+    if (nextPath !== u.pathname) {
+      u.pathname = nextPath;
+      return u.toString();
+    }
+    return thumbnailUrl;
+  } catch {
+    return thumbnailUrl;
+  }
+}
+
+export function youtubeListThumbnailFallback(videoId: string): string {
+  return `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`;
+}

@@ -5,7 +5,11 @@ import { VideoLightbox } from "@/components/video-lightbox";
 import { trackEvent } from "@/lib/analytics";
 import { AMBIENT_YOUTUBE_VIDEO_ID } from "@/lib/site";
 import type { ShowcaseVideo } from "@/lib/types";
-import { formatPublishedDate, tiktokEmbedSrc } from "@/lib/video-embed";
+import {
+  formatPublishedDate,
+  tiktokEmbedSrc,
+  youtubeThumbnailDisplayUrl,
+} from "@/lib/video-embed";
 
 type Props = {
   youtube: ShowcaseVideo[];
@@ -231,7 +235,7 @@ export function VideoShowcase({ youtube, tiktok, isLoading = false }: Props) {
                           {v.thumbnailUrl ? (
                             // eslint-disable-next-line @next/next/no-img-element -- avoid /_next/image; explicit dimensions in CSS
                             <img
-                              src={v.thumbnailUrl}
+                              src={youtubeThumbnailDisplayUrl(v.thumbnailUrl)}
                               alt=""
                               className="h-full w-full object-cover transition duration-300 ease-out group-hover:scale-[1.02]"
                               width={152}

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { AmbientYouTubeBackground } from "@/components/ambient-youtube-background";
 import { ContactForm } from "@/components/contact-form";
+import { PublicPicture } from "@/components/public-picture";
 import { VideoShowcase } from "@/components/video-showcase";
 import { trackEvent } from "@/lib/analytics";
 import type { ShowcaseVideo } from "@/lib/types";
@@ -22,10 +23,9 @@ const social = [
 
 const A2COFC_BADGE_HREF = "https://uavhub.com/";
 const A2COFC_BADGE_ASSET = "/a2cofc-badge.png";
+const A2COFC_BADGE_WEBP = "/a2cofc-badge.webp";
 const FALLOW_BRAND_LOGO_ASSET = "/fallowfpv-brand-logo.png";
-
-const publicBasePath = process.env.NEXT_PUBLIC_BASE_PATH?.trim() || "";
-const publicAsset = (path: string) => `${publicBasePath}${path}`;
+const FALLOW_BRAND_LOGO_WEBP = "/fallowfpv-brand-logo.webp";
 
 type ClientFeed = {
   youtube: ShowcaseVideo[];
@@ -141,11 +141,11 @@ export default function HomePage() {
               href="/"
               className="inline-flex items-end justify-center gap-3 whitespace-nowrap text-[26px] font-semibold tracking-[-0.04em] text-ink transition-opacity duration-180 hover:opacity-70 sm:text-[30px] lg:text-[34px] xl:justify-start"
             >
-              {/* eslint-disable-next-line @next/next/no-img-element -- static exported site logo from /public */}
-              <img
-                src={publicAsset(FALLOW_BRAND_LOGO_ASSET)}
+              <PublicPicture
+                webpSrc={FALLOW_BRAND_LOGO_WEBP}
+                fallbackSrc={FALLOW_BRAND_LOGO_ASSET}
                 alt=""
-                aria-hidden
+                ariaHidden
                 className="h-[68px] w-[68px] rounded-[8px] object-contain"
                 width={68}
                 height={68}
@@ -351,9 +351,9 @@ export default function HomePage() {
                   </ul>
                 </div>
                 <div className="flex items-center justify-start pl-2 sm:pl-4">
-                  {/* eslint-disable-next-line @next/next/no-img-element -- local logo shown in article modal */}
-                  <img
-                    src={publicAsset(FALLOW_BRAND_LOGO_ASSET)}
+                  <PublicPicture
+                    webpSrc={FALLOW_BRAND_LOGO_WEBP}
+                    fallbackSrc={FALLOW_BRAND_LOGO_ASSET}
                     alt="Fallow FPV logo"
                     className="h-[176px] w-[176px] object-contain"
                     width={176}
@@ -383,9 +383,9 @@ export default function HomePage() {
         ) : null}
 
         <div className="mx-auto flex max-w-[84rem] items-end justify-center gap-6 px-5 pb-4 sm:px-10">
-          {/* eslint-disable-next-line @next/next/no-img-element -- local brand logo image */}
-          <img
-            src={publicAsset(FALLOW_BRAND_LOGO_ASSET)}
+          <PublicPicture
+            webpSrc={FALLOW_BRAND_LOGO_WEBP}
+            fallbackSrc={FALLOW_BRAND_LOGO_ASSET}
             alt="Fallow FPV logo"
             className="h-[176px] w-[176px] object-contain"
             width={176}
@@ -408,9 +408,9 @@ export default function HomePage() {
               window.open(A2COFC_BADGE_HREF, "_blank", "noopener,noreferrer");
             }}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element -- local certification badge image */}
-            <img
-              src={publicAsset(A2COFC_BADGE_ASSET)}
+            <PublicPicture
+              webpSrc={A2COFC_BADGE_WEBP}
+              fallbackSrc={A2COFC_BADGE_ASSET}
               alt="A2 CofC certified remote pilot badge"
               className="h-[156px] w-[156px] rounded-full object-cover ring-1 ring-black/[0.12]"
               width={156}
