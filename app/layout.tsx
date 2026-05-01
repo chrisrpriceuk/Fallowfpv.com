@@ -25,7 +25,7 @@ const organizationSchema = {
   "@type": "ProfessionalService",
   name: siteName,
   url: siteUrl,
-  image: `${siteUrl}/fallow-logo-180.png`,
+  image: `${siteUrl}/fallow-logo-180.webp`,
   description: siteDescription,
   areaServed: "United Kingdom",
   serviceType: [
@@ -80,7 +80,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/fallow-logo-180.png",
+        url: "/fallow-logo-180.webp",
         width: 180,
         height: 180,
         alt: "Fallow FPV logo",
@@ -91,7 +91,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: siteTitle,
     description: siteDescription,
-    images: ["/fallow-logo-180.png"],
+    images: ["/fallow-logo-180.webp"],
   },
 };
 
@@ -129,7 +129,7 @@ export default function RootLayout({
           defer
           src="https://static.cloudflareinsights.com/beacon.min.js"
           data-cf-beacon='{"token":"d90f7074edf441f18b2955898f6b0d3e"}'
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
         <Script
           id="jsonld-organization"

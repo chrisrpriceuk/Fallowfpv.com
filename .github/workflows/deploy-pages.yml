@@ -30,6 +30,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Optimize local images (WebP)
+        run: npm run optimize:images
+
       - name: Generate showcase feed
         env:
           YOUTUBE_CHANNEL_ID: UCiGoENRCcmKv6QL-e9FmupA

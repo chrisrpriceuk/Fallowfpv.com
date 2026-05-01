@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { youtubeEmbedSrc } from "@/lib/video-embed";
 
 /**
@@ -12,6 +13,27 @@ export function AmbientYouTubeBackground({
   videoId: string;
   isDark?: boolean;
 }) {
+  const [loadEmbed, setLoadEmbed] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    const arm = () => {
+      if (!cancelled) setLoadEmbed(true);
+    };
+    const t = window.setTimeout(arm, 1800);
+    const idle =
+      typeof window.requestIdleCallback === "function"
+        ? window.requestIdleCallback(arm, { timeout: 5000 })
+        : undefined;
+    return () => {
+      cancelled = true;
+      window.clearTimeout(t);
+      if (idle !== undefined && typeof window.cancelIdleCallback === "function") {
+        window.cancelIdleCallback(idle);
+      }
+    };
+  }, []);
+
   const base = youtubeEmbedSrc(videoId, true, true);
   const src = `${base}${base.includes("?") ? "&" : "?"}controls=0&disablekb=1&fs=0&iv_load_policy=3&loop=1&playlist=${encodeURIComponent(videoId)}`;
   const videoOpacity = isDark ? 0.34 : 0.52;
@@ -45,13 +67,15 @@ export function AmbientYouTubeBackground({
           opacity: videoOpacity,
         }}
       >
-        <iframe
-          title=""
-          src={src}
-          className="pointer-events-none absolute inset-0 h-full w-full border-0"
-          allow="autoplay; encrypted-media"
-          tabIndex={-1}
-        />
+        {loadEmbed ? (
+          <iframe
+            title=""
+            src={src}
+            className="pointer-events-none absolute inset-0 h-full w-full border-0"
+            allow="autoplay; encrypted-media"
+            tabIndex={-1}
+          />
+        ) : null}
       </div>
       <div
         className="absolute inset-0"

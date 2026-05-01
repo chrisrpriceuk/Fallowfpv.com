@@ -88,10 +88,15 @@ function pickYoutubeThumb(entry, videoId) {
     .map((x) => ({ width: Number(x?.["@_width"] || 0), url: String(x?.["@_url"] || "") }))
     .filter((x) => x.url);
   if (withUrl.length > 0) {
-    withUrl.sort((a, b) => b.width - a.width);
+    const smallEnough = withUrl.filter((x) => x.width > 0 && x.width <= 480);
+    if (smallEnough.length > 0) {
+      smallEnough.sort((a, b) => b.width - a.width);
+      return smallEnough[0].url;
+    }
+    withUrl.sort((a, b) => a.width - b.width);
     return withUrl[0].url;
   }
-  return videoId ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg` : "";
+  return videoId ? `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg` : "";
 }
 
 function getYoutubeWatchUrl(entry, videoId) {
