@@ -17,7 +17,7 @@ const sectionLabel =
   "text-[12px] font-semibold uppercase tracking-[0.2em] text-ink-muted";
 
 /** Rows below the TikTok preview: keep balance with YouTube without truncating too hard. */
-const TIKTOK_LIST_INITIAL_MAX = 10;
+const INITIAL_VISIBLE_MAX = 6;
 const TIKTOK_LIST_PAGE_STEP = 8;
 
 /** Two columns at `lg`: each stack flows independently (no shared-row spacer). */
@@ -32,6 +32,10 @@ export function VideoShowcase({ youtube, tiktok, isLoading = false }: Props) {
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [youtubeExtraPages, setYoutubeExtraPages] = useState(0);
   const [tiktokExtraPages, setTiktokExtraPages] = useState(0);
+  const [shouldLoadTiktokPreview, setShouldLoadTiktokPreview] = useState(false);
+  const [tiktokPreviewHost, setTiktokPreviewHost] = useState<HTMLDivElement | null>(
+    null
+  );
 
   const closeLightbox = useCallback(() => {
     setLightboxVideo(null);
@@ -47,27 +51,45 @@ export function VideoShowcase({ youtube, tiktok, isLoading = false }: Props) {
       ? safeYoutube.length
       : Math.min(safeYoutube.length, tiktokList.length)
     : 0;
-  const pageSize = Math.max(baseVisibleCount, 6);
+  const pageSize = INITIAL_VISIBLE_MAX;
 
   useEffect(() => {
     setYoutubeExtraPages(0);
     setTiktokExtraPages(0);
   }, [safeYoutube.length, safeTiktok.length]);
 
+  useEffect(() => {
+    if (!tiktokPreviewHost || shouldLoadTiktokPreview) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setShouldLoadTiktokPreview(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "180px 0px" }
+    );
+    observer.observe(tiktokPreviewHost);
+    return () => observer.disconnect();
+  }, [tiktokPreviewHost, shouldLoadTiktokPreview]);
+
+  const youtubeInitialCap = hasBothLists
+    ? Math.min(INITIAL_VISIBLE_MAX, baseVisibleCount)
+    : Math.min(INITIAL_VISIBLE_MAX, safeYoutube.length);
   const youtubeVisibleCount = hasBothLists
     ? Math.min(
         safeYoutube.length,
-        baseVisibleCount + youtubeExtraPages * pageSize
+        youtubeInitialCap + youtubeExtraPages * pageSize
       )
-    : safeYoutube.length;
+    : Math.min(safeYoutube.length, youtubeInitialCap + youtubeExtraPages * pageSize);
 
   const tiktokInitialCap = hasBothLists
     ? Math.min(
-        TIKTOK_LIST_INITIAL_MAX,
+        INITIAL_VISIBLE_MAX,
         baseVisibleCount,
         tiktokList.length
       )
-    : Math.min(TIKTOK_LIST_INITIAL_MAX, tiktokList.length);
+    : Math.min(INITIAL_VISIBLE_MAX, tiktokList.length);
   const tiktokVisibleCount = Math.min(
     tiktokList.length,
     tiktokInitialCap + tiktokExtraPages * TIKTOK_LIST_PAGE_STEP
@@ -288,15 +310,25 @@ export function VideoShowcase({ youtube, tiktok, isLoading = false }: Props) {
             {tiktokPreview ? (
               <div className="mt-6">
                 <div className="mx-auto max-w-[min(100%,300px)] overflow-hidden rounded-[1.35rem] bg-black shadow-soft ring-1 ring-ink/10">
-                  <div className="relative aspect-[9/16] w-full">
-                    <iframe
-                      key={tiktokPreview.id}
-                      title={tiktokPreview.title}
-                      src={tiktokEmbedSrc(tiktokPreview.id, false)}
-                      className="absolute inset-0 h-full w-full border-0"
-                      allow="encrypted-media; fullscreen; autoplay; picture-in-picture"
-                      allowFullScreen
-                    />
+                  <div
+                    ref={setTiktokPreviewHost}
+                    className="relative aspect-[9/16] w-full"
+                  >
+                    {shouldLoadTiktokPreview ? (
+                      <iframe
+                        key={tiktokPreview.id}
+                        title={tiktokPreview.title}
+                        src={tiktokEmbedSrc(tiktokPreview.id, false)}
+                        className="absolute inset-0 h-full w-full border-0"
+                        allow="encrypted-media; fullscreen; autoplay; picture-in-picture"
+                        allowFullScreen
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center bg-black text-[13px] text-white/75">
+                        Loading preview...
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="mx-auto mt-5 max-w-[min(100%,300px)]">

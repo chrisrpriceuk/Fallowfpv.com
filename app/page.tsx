@@ -69,10 +69,7 @@ export default function HomePage() {
       const feedUrl =
         process.env.NEXT_PUBLIC_SHOWCASE_FEED_URL?.trim() || "showcase-feed.json";
       try {
-        const res = await fetch(feedUrl, {
-          cache: "no-store",
-          headers: { Accept: "application/json, text/plain, */*" },
-        });
+        const res = await fetch(feedUrl, { cache: "force-cache" });
         if (!res.ok) return;
         const json = (await res.json()) as {
           youtube?: unknown;
