@@ -24,7 +24,7 @@ export function ContactForm({
           : "mx-auto max-w-[84rem] px-5 pb-16 sm:px-10 sm:pb-20"
       }
     >
-      <div className="grid gap-8 rounded-[1.75rem] border border-white/50 bg-white/55 p-7 shadow-card backdrop-blur-2xl sm:p-10 lg:grid-cols-2 lg:gap-12">
+      <div className="grid gap-8 rounded-[1.75rem] border border-ink/10 bg-canvas/75 p-7 shadow-card backdrop-blur-2xl sm:p-10 lg:grid-cols-2 lg:gap-12">
         <div>
           <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-ink-faint">
             Contact
@@ -40,22 +40,22 @@ export function ContactForm({
               Need ideas?
             </p>
             <ul className="space-y-1.5 text-[13px] leading-[1.3] text-ink-muted">
-              <li className="rounded-md border border-black/[0.06] bg-white/40 px-2 py-1.5">
+              <li className="rounded-md border border-ink/10 bg-canvas-subtle/70 px-2 py-1.5">
                 Venue fly-throughs for websites and social media
               </li>
-              <li className="rounded-md border border-black/[0.06] bg-white/40 px-2 py-1.5">
+              <li className="rounded-md border border-ink/10 bg-canvas-subtle/70 px-2 py-1.5">
                 Event highlight reels (festivals, weddings, launches)
               </li>
-              <li className="rounded-md border border-black/[0.06] bg-white/40 px-2 py-1.5">
+              <li className="rounded-md border border-ink/10 bg-canvas-subtle/70 px-2 py-1.5">
                 Cinematic FPV tours of homes, hospitality, and gyms
               </li>
-              <li className="rounded-md border border-black/[0.06] bg-white/40 px-2 py-1.5">
+              <li className="rounded-md border border-ink/10 bg-canvas-subtle/70 px-2 py-1.5">
                 Branded drone clips for ads, campaigns, and promos
               </li>
-              <li className="rounded-md border border-black/[0.06] bg-white/40 px-2 py-1.5">
+              <li className="rounded-md border border-ink/10 bg-canvas-subtle/70 px-2 py-1.5">
                 Action footage for sport, automotive, and outdoor content
               </li>
-              <li className="rounded-md border border-black/[0.06] bg-white/40 px-2 py-1.5">
+              <li className="rounded-md border border-ink/10 bg-canvas-subtle/70 px-2 py-1.5">
                 Aerial photography for listings, press, and print
               </li>
             </ul>
@@ -75,6 +75,7 @@ export function ContactForm({
               name: fd.get("name"),
               email: fd.get("email"),
               project: fd.get("project"),
+              date: fd.get("date"),
               message: fd.get("message"),
               company: fd.get("company"),
             } as Partial<ContactFormPayload>);
@@ -133,7 +134,7 @@ export function ContactForm({
                 required
                 name="name"
                 autoComplete="name"
-                className="w-full rounded-xl border border-black/[0.08] bg-white/80 px-4 py-3 text-[15px] text-ink outline-none transition focus:border-black/[0.2] focus:ring-2 focus:ring-black/[0.08]"
+                className="w-full rounded-xl border border-ink/10 bg-canvas/85 px-4 py-3 text-[15px] text-ink outline-none transition placeholder:text-ink-faint focus:border-ink/25 focus:ring-2 focus:ring-ink/10"
               />
             </label>
             <label className="block">
@@ -145,7 +146,7 @@ export function ContactForm({
                 type="email"
                 name="email"
                 autoComplete="email"
-                className="w-full rounded-xl border border-black/[0.08] bg-white/80 px-4 py-3 text-[15px] text-ink outline-none transition focus:border-black/[0.2] focus:ring-2 focus:ring-black/[0.08]"
+                className="w-full rounded-xl border border-ink/10 bg-canvas/85 px-4 py-3 text-[15px] text-ink outline-none transition placeholder:text-ink-faint focus:border-ink/25 focus:ring-2 focus:ring-ink/10"
               />
             </label>
           </div>
@@ -157,7 +158,18 @@ export function ContactForm({
             <input
               name="project"
               placeholder="Commercial shoot, event coverage, real estate, etc."
-              className="w-full rounded-xl border border-black/[0.08] bg-white/80 px-4 py-3 text-[15px] text-ink outline-none transition focus:border-black/[0.2] focus:ring-2 focus:ring-black/[0.08]"
+              className="w-full rounded-xl border border-ink/10 bg-canvas/85 px-4 py-3 text-[15px] text-ink outline-none transition placeholder:text-ink-faint focus:border-ink/25 focus:ring-2 focus:ring-ink/10"
+            />
+          </label>
+
+          <label className="block">
+            <span className="mb-1.5 block text-[13px] font-medium text-ink-muted">
+              Preferred date
+            </span>
+            <input
+              type="date"
+              name="date"
+              className="w-full rounded-xl border border-ink/10 bg-canvas/85 px-4 py-3 text-[15px] text-ink outline-none transition placeholder:text-ink-faint focus:border-ink/25 focus:ring-2 focus:ring-ink/10"
             />
           </label>
 
@@ -169,7 +181,7 @@ export function ContactForm({
               required
               name="message"
               rows={5}
-              className="w-full resize-y rounded-xl border border-black/[0.08] bg-white/80 px-4 py-3 text-[15px] leading-relaxed text-ink outline-none transition focus:border-black/[0.2] focus:ring-2 focus:ring-black/[0.08]"
+              className="w-full resize-y rounded-xl border border-ink/10 bg-canvas/85 px-4 py-3 text-[15px] leading-relaxed text-ink outline-none transition placeholder:text-ink-faint focus:border-ink/25 focus:ring-2 focus:ring-ink/10"
               placeholder="Tell me about location, timeline, and what you need filmed."
             />
           </label>
@@ -178,7 +190,7 @@ export function ContactForm({
             <button
               type="submit"
               disabled={status === "submitting"}
-              className="rounded-full bg-ink px-5 py-2.5 text-[14px] font-semibold text-white transition hover:bg-black"
+              className="rounded-full bg-ink px-5 py-2.5 text-[14px] font-semibold text-canvas transition hover:opacity-85"
             >
               {status === "submitting" ? "Sending..." : "Bring your vision to life"}
             </button>

@@ -5,9 +5,19 @@ import { youtubeEmbedSrc } from "@/lib/video-embed";
 /**
  * Full-viewport YouTube embed as a soft backdrop (muted autoplay, non-interactive).
  */
-export function AmbientYouTubeBackground({ videoId }: { videoId: string }) {
+export function AmbientYouTubeBackground({
+  videoId,
+  isDark = false,
+}: {
+  videoId: string;
+  isDark?: boolean;
+}) {
   const base = youtubeEmbedSrc(videoId, true, true);
-  const src = `${base}${base.includes("?") ? "&" : "?"}controls=0&loop=1&playlist=${encodeURIComponent(videoId)}`;
+  const src = `${base}${base.includes("?") ? "&" : "?"}controls=0&disablekb=1&fs=0&iv_load_policy=3&loop=1&playlist=${encodeURIComponent(videoId)}`;
+  const videoOpacity = isDark ? 0.34 : 0.52;
+  const wash = isDark
+    ? "linear-gradient(to bottom, rgba(13,14,18,0.86) 0%, rgba(13,14,18,0.62) 45%, rgba(13,14,18,0.9) 100%)"
+    : "linear-gradient(to bottom, rgba(250,250,252,0.64) 0%, rgba(250,250,252,0.42) 45%, rgba(250,250,252,0.76) 100%)";
 
   return (
     <div
@@ -22,7 +32,7 @@ export function AmbientYouTubeBackground({ videoId }: { videoId: string }) {
       }}
     >
       <div
-        className="absolute left-1/2 top-1/2 h-[56.25vw] min-h-full w-[177.78vh] min-w-full -translate-x-1/2 -translate-y-1/2 opacity-[0.52]"
+        className="absolute left-1/2 top-1/2 h-[56.25vw] min-h-full w-[177.78vh] min-w-full -translate-x-1/2 -translate-y-1/2"
         style={{
           position: "absolute",
           left: "50%",
@@ -32,24 +42,32 @@ export function AmbientYouTubeBackground({ videoId }: { videoId: string }) {
           height: "100vh",
           minWidth: "100%",
           minHeight: "56.25vw",
-          opacity: 0.52,
+          opacity: videoOpacity,
         }}
       >
         <iframe
           title=""
           src={src}
-          className="absolute inset-0 h-full w-full border-0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          className="pointer-events-none absolute inset-0 h-full w-full border-0"
+          allow="autoplay; encrypted-media"
+          tabIndex={-1}
         />
       </div>
       <div
-        className="absolute inset-0 bg-gradient-to-b from-canvas/[0.64] via-canvas/[0.42] to-canvas/[0.76]"
+        className="absolute inset-0"
         style={{
           position: "absolute",
           inset: 0,
           pointerEvents: "none",
-          background:
-            "linear-gradient(to bottom, rgba(250,250,252,0.64) 0%, rgba(250,250,252,0.42) 45%, rgba(250,250,252,0.76) 100%)",
+          background: wash,
+        }}
+      />
+      <div
+        className="absolute left-1/2 top-[56%] h-24 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full blur-2xl"
+        style={{
+          backgroundColor: isDark
+            ? "rgba(13,14,18,0.72)"
+            : "rgba(250,250,252,0.66)",
         }}
       />
     </div>

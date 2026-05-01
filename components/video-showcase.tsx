@@ -131,7 +131,7 @@ export function VideoShowcase({ youtube, tiktok }: Props) {
 
       {(hasYoutube || hasTiktok) && (
         <section
-          className={`showcase-shell grid content-start items-start gap-12 rounded-[1.75rem] border border-white/50 bg-white/55 p-7 shadow-card backdrop-blur-2xl sm:gap-14 sm:p-10 ${
+          className={`showcase-shell grid content-start items-start gap-12 rounded-[1.75rem] border border-ink/10 bg-canvas/70 p-7 shadow-card backdrop-blur-2xl sm:gap-14 sm:p-10 ${
             bothFeeds
               ? "lg:grid-cols-2 lg:items-stretch lg:gap-x-14 lg:gap-y-0"
               : "lg:grid-cols-1"
@@ -151,7 +151,7 @@ export function VideoShowcase({ youtube, tiktok }: Props) {
                       key={v.id}
                       className={
                         isBackgroundClip
-                          ? "mb-1 border-b border-black/[0.08] pb-3"
+                          ? "mb-1 border-b border-ink/10 pb-3"
                           : ""
                       }
                     >
@@ -166,11 +166,11 @@ export function VideoShowcase({ youtube, tiktok }: Props) {
                         }
                         className={`showcase-row-btn group flex w-full gap-4 rounded-2xl p-2.5 text-left transition-colors duration-180 sm:gap-5 sm:p-3 ${
                           isBackgroundClip
-                            ? "showcase-row-btn--featured bg-black/[0.04] ring-1 ring-black/[0.08] hover:bg-black/[0.055]"
-                            : "hover:bg-black/[0.035]"
+                            ? "showcase-row-btn--featured bg-ink/5 ring-1 ring-ink/10 hover:bg-ink/[0.07]"
+                            : "hover:bg-ink/5"
                         }`}
                       >
-                        <div className="showcase-thumb-yt relative h-[76px] w-[134px] shrink-0 overflow-hidden rounded-[0.65rem] bg-canvas-subtle ring-1 ring-black/[0.04] sm:h-[86px] sm:w-[152px]">
+                        <div className="showcase-thumb-yt relative h-[76px] w-[134px] shrink-0 overflow-hidden rounded-[0.65rem] bg-canvas-subtle ring-1 ring-ink/10 sm:h-[86px] sm:w-[152px]">
                           {v.thumbnailUrl ? (
                             // eslint-disable-next-line @next/next/no-img-element -- avoid /_next/image; explicit dimensions in CSS
                             <img
@@ -192,12 +192,12 @@ export function VideoShowcase({ youtube, tiktok }: Props) {
                         <div className="min-w-0 flex-1 py-0.5">
                           {isBackgroundClip ? (
                             <div className="mb-1.5 flex items-center gap-2">
-                              <span className="inline-flex rounded-full bg-black/[0.06] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-ink-muted">
+                              <span className="inline-flex rounded-full bg-ink/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-ink-muted">
                                 Background clip
                               </span>
                               <span
                                 aria-hidden
-                                className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-black/[0.07] text-[10px] text-ink-muted"
+                                className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-ink/10 text-[10px] text-ink-muted"
                                 title="Now in background"
                               >
                                 ◌
@@ -228,7 +228,7 @@ export function VideoShowcase({ youtube, tiktok }: Props) {
                   <button
                     type="button"
                     onClick={() => setYoutubeExtraPages((p) => p + 1)}
-                    className="rounded-full border border-black/[0.12] bg-white/70 px-4 py-2 text-[13px] font-medium text-ink transition hover:bg-white"
+                    className="rounded-full border border-ink/15 bg-canvas-subtle/70 px-4 py-2 text-[13px] font-medium text-ink transition hover:bg-canvas-subtle"
                   >
                     More ({safeYoutube.length - youtubeVisibleCount} remaining)
                   </button>
@@ -246,7 +246,7 @@ export function VideoShowcase({ youtube, tiktok }: Props) {
 
             {tiktokPreview ? (
               <div className="mt-6">
-                <div className="mx-auto max-w-[min(100%,300px)] overflow-hidden rounded-[1.35rem] bg-black shadow-soft ring-1 ring-black/[0.05]">
+                <div className="mx-auto max-w-[min(100%,300px)] overflow-hidden rounded-[1.35rem] bg-black shadow-soft ring-1 ring-ink/10">
                   <div className="relative aspect-[9/16] w-full">
                     <iframe
                       key={tiktokPreview.id}
@@ -297,9 +297,9 @@ export function VideoShowcase({ youtube, tiktok }: Props) {
                             idx
                           )
                         }
-                        className="showcase-row-btn group flex w-full gap-3 rounded-2xl p-2 text-left transition-colors duration-180 hover:bg-black/[0.035] sm:gap-3.5 sm:p-2.5"
+                        className="showcase-row-btn group flex w-full gap-3 rounded-2xl p-2 text-left transition-colors duration-180 hover:bg-ink/5 sm:gap-3.5 sm:p-2.5"
                       >
-                        <div className="showcase-thumb-tt relative h-[90px] w-[52px] shrink-0 overflow-hidden rounded-[0.5rem] bg-canvas-subtle ring-1 ring-black/[0.04]">
+                        <div className="showcase-thumb-tt relative h-[90px] w-[52px] shrink-0 overflow-hidden rounded-[0.5rem] bg-canvas-subtle ring-1 ring-ink/10">
                           {v.thumbnailUrl ? (
                             // eslint-disable-next-line @next/next/no-img-element -- TikTok CDN hosts vary
                             <img
@@ -342,7 +342,7 @@ export function VideoShowcase({ youtube, tiktok }: Props) {
                   <button
                     type="button"
                     onClick={() => setTiktokExtraPages((p) => p + 1)}
-                    className="rounded-full border border-black/[0.12] bg-white/70 px-4 py-2 text-[13px] font-medium text-ink transition hover:bg-white"
+                    className="rounded-full border border-ink/15 bg-canvas-subtle/70 px-4 py-2 text-[13px] font-medium text-ink transition hover:bg-canvas-subtle"
                   >
                     More ({tiktokList.length - tiktokVisibleCount} remaining)
                   </button>
