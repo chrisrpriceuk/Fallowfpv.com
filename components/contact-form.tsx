@@ -5,13 +5,25 @@ import { normalizeContactPayload, type ContactFormPayload } from "@/lib/contact"
 
 type Status = "idle" | "submitting" | "success" | "error";
 
-export function ContactForm() {
+export function ContactForm({
+  variant = "inline",
+}: {
+  variant?: "inline" | "modal";
+}) {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
   const webhookUrl = process.env.NEXT_PUBLIC_N8N_WEBHOOK_URL?.trim() || "";
+  const isModal = variant === "modal";
 
   return (
-    <section id="contact" className="mx-auto max-w-[84rem] px-5 pb-16 sm:px-10 sm:pb-20">
+    <section
+      id={isModal ? undefined : "contact"}
+      className={
+        isModal
+          ? "w-full"
+          : "mx-auto max-w-[84rem] px-5 pb-16 sm:px-10 sm:pb-20"
+      }
+    >
       <div className="grid gap-8 rounded-[1.75rem] border border-white/50 bg-white/55 p-7 shadow-card backdrop-blur-2xl sm:p-10 lg:grid-cols-2 lg:gap-12">
         <div>
           <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-ink-faint">
@@ -23,6 +35,31 @@ export function ContactForm() {
           <p className="mt-5 max-w-[32rem] text-[17px] leading-[1.55] text-ink-muted">
             Share a few details and I will get back to you.
           </p>
+          <div className="mt-6 space-y-2">
+            <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-ink-faint">
+              Need ideas?
+            </p>
+            <ul className="space-y-1.5 text-[13px] leading-[1.3] text-ink-muted">
+              <li className="rounded-md border border-black/[0.06] bg-white/40 px-2 py-1.5">
+                Venue fly-throughs for websites and social media
+              </li>
+              <li className="rounded-md border border-black/[0.06] bg-white/40 px-2 py-1.5">
+                Event highlight reels (festivals, weddings, launches)
+              </li>
+              <li className="rounded-md border border-black/[0.06] bg-white/40 px-2 py-1.5">
+                Cinematic FPV tours of homes, hospitality, and gyms
+              </li>
+              <li className="rounded-md border border-black/[0.06] bg-white/40 px-2 py-1.5">
+                Branded drone clips for ads, campaigns, and promos
+              </li>
+              <li className="rounded-md border border-black/[0.06] bg-white/40 px-2 py-1.5">
+                Action footage for sport, automotive, and outdoor content
+              </li>
+              <li className="rounded-md border border-black/[0.06] bg-white/40 px-2 py-1.5">
+                Aerial photography for listings, press, and print
+              </li>
+            </ul>
+          </div>
         </div>
 
         <form
@@ -137,13 +174,13 @@ export function ContactForm() {
             />
           </label>
 
-          <div className="flex items-center gap-4 pt-1">
+          <div className="flex flex-wrap items-center justify-end gap-4 pt-1">
             <button
               type="submit"
               disabled={status === "submitting"}
               className="rounded-full bg-ink px-5 py-2.5 text-[14px] font-semibold text-white transition hover:bg-black"
             >
-              {status === "submitting" ? "Sending..." : "Send message"}
+              {status === "submitting" ? "Sending..." : "Bring your vision to life"}
             </button>
             {status === "success" ? (
               <p className="text-[14px] text-ink-muted">
