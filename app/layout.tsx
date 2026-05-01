@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Fallow FPV",
     description: "FPV drone pilot and aerial filmmaker — UK.",
-    url: "https://fallowfpv.com",
+    url: "https://www.fallowfpv.com",
     siteName: "Fallow FPV",
     locale: "en_GB",
     type: "website",
