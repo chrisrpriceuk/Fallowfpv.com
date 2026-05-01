@@ -134,10 +134,10 @@ export default function HomePage() {
 
       <div className="site-layer relative z-10">
         <header className="sticky top-0 z-20 border-b border-ink/10 bg-canvas/80 backdrop-blur-2xl backdrop-saturate-150">
-          <div className="mx-auto flex max-w-[84rem] items-center justify-between gap-8 px-5 py-4 sm:px-10">
+          <div className="mx-auto flex max-w-[84rem] flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-8 sm:px-10">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 text-[17px] font-semibold tracking-[-0.022em] text-ink transition-opacity duration-180 hover:opacity-70"
+              className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-[16px] font-semibold tracking-[-0.022em] text-ink transition-opacity duration-180 hover:opacity-70 sm:justify-start sm:text-[17px]"
             >
               {/* eslint-disable-next-line @next/next/no-img-element -- static exported site logo from /public */}
               <img
@@ -152,7 +152,7 @@ export default function HomePage() {
               />
               <span>Chris - Fallow FPV</span>
             </Link>
-            <nav className="flex flex-wrap items-center justify-end gap-x-8 gap-y-2 text-[15px] font-medium tracking-[-0.012em] text-ink-muted">
+            <nav className="grid grid-cols-2 items-center gap-x-5 gap-y-2 text-center text-[14px] font-medium tracking-[-0.012em] text-ink-muted sm:flex sm:flex-wrap sm:justify-end sm:gap-x-8 sm:text-[15px]">
               <button
                 type="button"
                 className="transition-opacity duration-180 hover:opacity-70"
@@ -180,7 +180,7 @@ export default function HomePage() {
               ))}
               <button
                 type="button"
-                className="relative inline-flex h-8 w-[5.25rem] items-center rounded-full border border-ink/10 bg-canvas/75 p-1 text-[11px] font-semibold text-ink shadow-soft transition duration-180 hover:bg-canvas-subtle"
+                className="relative mx-auto inline-flex h-8 w-[5.25rem] items-center rounded-full border border-ink/10 bg-canvas/75 p-1 text-[11px] font-semibold text-ink shadow-soft transition duration-180 hover:bg-canvas-subtle sm:mx-0"
                 onClick={toggleTheme}
                 aria-pressed={isDarkMode}
                 aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
@@ -246,7 +246,7 @@ export default function HomePage() {
 
         {isContactModalOpen ? (
           <div
-            className="fixed inset-0 z-[110] flex items-center justify-center p-4 sm:p-8"
+            className="fixed inset-0 z-[110] flex items-start justify-center overflow-y-auto p-3 py-5 sm:p-8"
             role="dialog"
             aria-modal="true"
             aria-label="Contact form"
@@ -257,11 +257,11 @@ export default function HomePage() {
               onClick={() => setIsContactModalOpen(false)}
               aria-label="Close contact form"
             />
-            <div className="relative z-10 w-full max-w-[min(100%,980px)]">
+            <div className="relative z-10 w-full max-w-[min(100%,980px)] pb-6">
               <button
                 type="button"
                 onClick={() => setIsContactModalOpen(false)}
-                className="absolute right-3 top-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-black/30 text-[18px] leading-none text-white backdrop-blur-md transition-colors duration-180 hover:bg-black/45"
+                className="sticky left-full top-3 z-[120] -mb-8 mr-3 flex h-8 w-8 -translate-x-3 items-center justify-center rounded-full bg-black/30 text-[18px] leading-none text-white backdrop-blur-md transition-colors duration-180 hover:bg-black/45"
                 aria-label="Close"
               >
                 ×
@@ -376,6 +376,10 @@ export default function HomePage() {
             rel="noreferrer noopener"
             className="transition-opacity duration-180 hover:opacity-80"
             aria-label="View A2 CofC certificate badge"
+            onClick={(e) => {
+              e.preventDefault();
+              window.open(A2COFC_BADGE_HREF, "_blank", "noopener,noreferrer");
+            }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element -- local certification badge image */}
             <img
