@@ -28,6 +28,14 @@ body {
   letter-spacing: -0.012em;
 }
 
+input[type="date"] {
+  -webkit-appearance: none;
+  appearance: none;
+  box-sizing: border-box;
+  max-width: 100%;
+  min-width: 0;
+}
+
 ::selection {
   background-color: rgba(212, 212, 216, 0.45);
   color: rgb(var(--color-ink));

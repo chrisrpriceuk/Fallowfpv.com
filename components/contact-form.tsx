@@ -24,7 +24,7 @@ export function ContactForm({
           : "mx-auto max-w-[84rem] px-5 pb-16 sm:px-10 sm:pb-20"
       }
     >
-      <div className="grid gap-8 rounded-[1.75rem] border border-ink/10 bg-canvas/75 p-7 shadow-card backdrop-blur-2xl sm:p-10 lg:grid-cols-2 lg:gap-12">
+      <div className="grid gap-8 rounded-[1.75rem] border border-ink/10 bg-canvas/75 p-5 shadow-card backdrop-blur-2xl sm:p-10 lg:grid-cols-2 lg:gap-12">
         <div>
           <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-ink-faint">
             Contact
@@ -134,7 +134,7 @@ export function ContactForm({
                 required
                 name="name"
                 autoComplete="name"
-                className="w-full rounded-xl border border-ink/10 bg-canvas/85 px-4 py-3 text-[15px] text-ink outline-none transition placeholder:text-ink-faint focus:border-ink/25 focus:ring-2 focus:ring-ink/10"
+                className="block w-full min-w-0 rounded-xl border border-ink/10 bg-canvas/85 px-4 py-3 text-[15px] text-ink outline-none transition placeholder:text-ink-faint focus:border-ink/25 focus:ring-2 focus:ring-ink/10"
               />
             </label>
             <label className="block">
@@ -146,7 +146,7 @@ export function ContactForm({
                 type="email"
                 name="email"
                 autoComplete="email"
-                className="w-full rounded-xl border border-ink/10 bg-canvas/85 px-4 py-3 text-[15px] text-ink outline-none transition placeholder:text-ink-faint focus:border-ink/25 focus:ring-2 focus:ring-ink/10"
+                className="block w-full min-w-0 rounded-xl border border-ink/10 bg-canvas/85 px-4 py-3 text-[15px] text-ink outline-none transition placeholder:text-ink-faint focus:border-ink/25 focus:ring-2 focus:ring-ink/10"
               />
             </label>
           </div>
@@ -157,8 +157,8 @@ export function ContactForm({
             </span>
             <input
               name="project"
-              placeholder="Commercial shoot, event coverage, real estate, etc."
-              className="w-full rounded-xl border border-ink/10 bg-canvas/85 px-4 py-3 text-[15px] text-ink outline-none transition placeholder:text-ink-faint focus:border-ink/25 focus:ring-2 focus:ring-ink/10"
+              placeholder="Commercial shoot, event coverage, etc."
+              className="block w-full min-w-0 rounded-xl border border-ink/10 bg-canvas/85 px-4 py-3 text-[15px] text-ink outline-none transition placeholder:text-ink-faint focus:border-ink/25 focus:ring-2 focus:ring-ink/10"
             />
           </label>
 
@@ -169,7 +169,7 @@ export function ContactForm({
             <input
               type="date"
               name="date"
-              className="w-full rounded-xl border border-ink/10 bg-canvas/85 px-4 py-3 text-[15px] text-ink outline-none transition placeholder:text-ink-faint focus:border-ink/25 focus:ring-2 focus:ring-ink/10"
+              className="block w-full min-w-0 max-w-full rounded-xl border border-ink/10 bg-canvas/85 px-4 py-3 text-[15px] text-ink outline-none transition placeholder:text-ink-faint focus:border-ink/25 focus:ring-2 focus:ring-ink/10"
             />
           </label>
 
@@ -181,7 +181,7 @@ export function ContactForm({
               required
               name="message"
               rows={5}
-              className="w-full resize-y rounded-xl border border-ink/10 bg-canvas/85 px-4 py-3 text-[15px] leading-relaxed text-ink outline-none transition placeholder:text-ink-faint focus:border-ink/25 focus:ring-2 focus:ring-ink/10"
+              className="block w-full min-w-0 resize-y rounded-xl border border-ink/10 bg-canvas/85 px-4 py-3 text-[15px] leading-relaxed text-ink outline-none transition placeholder:text-ink-faint focus:border-ink/25 focus:ring-2 focus:ring-ink/10"
               placeholder="Tell me about location, timeline, and what you need filmed."
             />
           </label>
