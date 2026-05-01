@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { VideoLightbox } from "@/components/video-lightbox";
+import { trackEvent } from "@/lib/analytics";
 import { AMBIENT_YOUTUBE_VIDEO_ID } from "@/lib/site";
 import type { ShowcaseVideo } from "@/lib/types";
 import { formatPublishedDate, tiktokEmbedSrc } from "@/lib/video-embed";
@@ -187,12 +188,17 @@ export function VideoShowcase({ youtube, tiktok, isLoading = false }: Props) {
                       <button
                         type="button"
                         title={v.title}
-                        onClick={() =>
+                        onClick={() => {
+                          trackEvent("video_lightbox_open", {
+                            platform: "youtube",
+                            source: "youtube_list",
+                            video_id: v.id,
+                          });
                           openLightboxFromQueue(
                             safeYoutube.slice(0, youtubeVisibleCount),
                             idx
-                          )
-                        }
+                          );
+                        }}
                         className={`showcase-row-btn group flex w-full gap-4 rounded-2xl p-2.5 text-left transition-colors duration-180 sm:gap-5 sm:p-3 ${
                           isBackgroundClip
                             ? "showcase-row-btn--featured bg-ink/5 ring-1 ring-ink/10 hover:bg-ink/[0.07]"
@@ -256,7 +262,13 @@ export function VideoShowcase({ youtube, tiktok, isLoading = false }: Props) {
                 <div className={moreWrapClass}>
                   <button
                     type="button"
-                    onClick={() => setYoutubeExtraPages((p) => p + 1)}
+                    onClick={() => {
+                      trackEvent("video_list_expand", {
+                        platform: "youtube",
+                        remaining: safeYoutube.length - youtubeVisibleCount,
+                      });
+                      setYoutubeExtraPages((p) => p + 1);
+                    }}
                     className="rounded-full border border-ink/15 bg-canvas-subtle/70 px-4 py-2 text-[13px] font-medium text-ink transition hover:bg-canvas-subtle"
                   >
                     More ({safeYoutube.length - youtubeVisibleCount} remaining)
@@ -302,6 +314,13 @@ export function VideoShowcase({ youtube, tiktok, isLoading = false }: Props) {
                       className="text-link transition-colors duration-180 hover:text-link-hover hover:underline hover:underline-offset-[3px]"
                       target="_blank"
                       rel="noreferrer noopener"
+                      onClick={() =>
+                        trackEvent("outbound_link_click", {
+                          destination: "tiktok",
+                          location: "tiktok_featured_preview",
+                          video_id: tiktokPreview.id,
+                        })
+                      }
                     >
                       Open in TikTok
                     </a>
@@ -320,12 +339,17 @@ export function VideoShowcase({ youtube, tiktok, isLoading = false }: Props) {
                       <button
                         type="button"
                         title={v.title}
-                        onClick={() =>
+                        onClick={() => {
+                          trackEvent("video_lightbox_open", {
+                            platform: "tiktok",
+                            source: "tiktok_list",
+                            video_id: v.id,
+                          });
                           openLightboxFromQueue(
                             tiktokList.slice(0, tiktokVisibleCount),
                             idx
-                          )
-                        }
+                          );
+                        }}
                         className="showcase-row-btn group flex w-full gap-3 rounded-2xl p-2 text-left transition-colors duration-180 hover:bg-ink/5 sm:gap-3.5 sm:p-2.5"
                       >
                         <div className="showcase-thumb-tt relative h-[90px] w-[52px] shrink-0 overflow-hidden rounded-[0.5rem] bg-canvas-subtle ring-1 ring-ink/10">
@@ -370,7 +394,13 @@ export function VideoShowcase({ youtube, tiktok, isLoading = false }: Props) {
                 <div className={moreWrapClass}>
                   <button
                     type="button"
-                    onClick={() => setTiktokExtraPages((p) => p + 1)}
+                    onClick={() => {
+                      trackEvent("video_list_expand", {
+                        platform: "tiktok",
+                        remaining: tiktokList.length - tiktokVisibleCount,
+                      });
+                      setTiktokExtraPages((p) => p + 1);
+                    }}
                     className="rounded-full border border-ink/15 bg-canvas-subtle/70 px-4 py-2 text-[13px] font-medium text-ink transition hover:bg-canvas-subtle"
                   >
                     More ({tiktokList.length - tiktokVisibleCount} remaining)

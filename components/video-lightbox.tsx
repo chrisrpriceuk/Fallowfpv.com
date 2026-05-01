@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { trackEvent } from "@/lib/analytics";
 import type { ShowcaseVideo } from "@/lib/types";
 import {
   formatPublishedDate,
@@ -84,7 +85,14 @@ export function VideoLightbox({
         >
           <button
             type="button"
-            onClick={onPrev}
+            onClick={() => {
+              trackEvent("video_lightbox_navigate", {
+                direction: "prev",
+                platform: video.platform,
+                video_id: video.id,
+              });
+              onPrev();
+            }}
             disabled={!canPrev}
             className="absolute left-3 top-1/2 z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-[26px] font-semibold leading-none text-white shadow-lg ring-1 ring-white/30 backdrop-blur-md transition duration-180 hover:scale-[1.03] hover:bg-black/60 disabled:cursor-not-allowed disabled:opacity-35"
             aria-label="Previous video"
@@ -93,7 +101,14 @@ export function VideoLightbox({
           </button>
           <button
             type="button"
-            onClick={onNext}
+            onClick={() => {
+              trackEvent("video_lightbox_navigate", {
+                direction: "next",
+                platform: video.platform,
+                video_id: video.id,
+              });
+              onNext();
+            }}
             disabled={!canNext}
             className="absolute right-3 top-1/2 z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-[26px] font-semibold leading-none text-white shadow-lg ring-1 ring-white/30 backdrop-blur-md transition duration-180 hover:scale-[1.03] hover:bg-black/60 disabled:cursor-not-allowed disabled:opacity-35"
             aria-label="Next video"
@@ -130,7 +145,13 @@ export function VideoLightbox({
               <div className="absolute bottom-2 right-2 z-20 flex gap-2">
                 <button
                   type="button"
-                  onClick={() => setTiktokReloadKey((k) => k + 1)}
+                  onClick={() => {
+                    trackEvent("video_embed_reload", {
+                      platform: "tiktok",
+                      video_id: video.id,
+                    });
+                    setTiktokReloadKey((k) => k + 1);
+                  }}
                   className="rounded-full bg-black/55 px-3 py-1.5 text-[12px] font-medium text-white ring-1 ring-white/25 backdrop-blur-md transition-colors duration-180 hover:bg-black/70"
                 >
                   Reload
@@ -139,6 +160,13 @@ export function VideoLightbox({
                   href={video.watchUrl}
                   target="_blank"
                   rel="noreferrer noopener"
+                  onClick={() =>
+                    trackEvent("outbound_link_click", {
+                      destination: "tiktok",
+                      location: "video_lightbox",
+                      video_id: video.id,
+                    })
+                  }
                   className="rounded-full bg-black/55 px-3 py-1.5 text-[12px] font-medium text-white ring-1 ring-white/25 backdrop-blur-md transition-colors duration-180 hover:bg-black/70"
                 >
                   Open in TikTok
@@ -175,6 +203,13 @@ export function VideoLightbox({
               className="text-link transition-colors duration-180 hover:text-link-hover hover:underline hover:underline-offset-[3px]"
               target="_blank"
               rel="noreferrer noopener"
+              onClick={() =>
+                trackEvent("outbound_link_click", {
+                  destination: isYt ? "youtube" : "tiktok",
+                  location: "video_lightbox",
+                  video_id: video.id,
+                })
+              }
             >
               {openLabel}
             </a>
