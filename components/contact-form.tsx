@@ -1,8 +1,42 @@
 "use client";
 
 import { useState } from "react";
+import { PublicPicture } from "@/components/public-picture";
 import { trackEvent } from "@/lib/analytics";
 import { normalizeContactPayload, type ContactFormPayload } from "@/lib/contact";
+
+const FALLOW_BRAND_LOGO_WEBP = "/fallowfpv-brand-logo.webp";
+const FALLOW_BRAND_LOGO_ASSET = "/fallowfpv-brand-logo.png";
+
+function ContactIdeasSection() {
+  return (
+    <div className="space-y-2">
+      <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-ink-faint">
+        Need ideas?
+      </p>
+      <ul className="space-y-1.5 text-[13px] leading-[1.3] text-ink-muted">
+        <li className="rounded-md border border-ink/10 bg-canvas-subtle/70 px-2 py-1.5">
+          Venue fly-throughs for websites and social media
+        </li>
+        <li className="rounded-md border border-ink/10 bg-canvas-subtle/70 px-2 py-1.5">
+          Event highlight reels (festivals, weddings, launches)
+        </li>
+        <li className="rounded-md border border-ink/10 bg-canvas-subtle/70 px-2 py-1.5">
+          Cinematic FPV tours of homes, hospitality, and gyms
+        </li>
+        <li className="rounded-md border border-ink/10 bg-canvas-subtle/70 px-2 py-1.5">
+          Branded drone clips for ads, campaigns, and promos
+        </li>
+        <li className="rounded-md border border-ink/10 bg-canvas-subtle/70 px-2 py-1.5">
+          Action footage for sport, automotive, and outdoor content
+        </li>
+        <li className="rounded-md border border-ink/10 bg-canvas-subtle/70 px-2 py-1.5">
+          Aerial photography for listings, press, and print
+        </li>
+      </ul>
+    </div>
+  );
+}
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -36,30 +70,23 @@ export function ContactForm({
           <p className="mt-5 max-w-[32rem] text-[17px] leading-[1.55] text-ink-muted">
             Share a few details and I will get back to you.
           </p>
-          <div className="mt-6 space-y-2">
-            <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-ink-faint">
-              Need ideas?
-            </p>
-            <ul className="space-y-1.5 text-[13px] leading-[1.3] text-ink-muted">
-              <li className="rounded-md border border-ink/10 bg-canvas-subtle/70 px-2 py-1.5">
-                Venue fly-throughs for websites and social media
-              </li>
-              <li className="rounded-md border border-ink/10 bg-canvas-subtle/70 px-2 py-1.5">
-                Event highlight reels (festivals, weddings, launches)
-              </li>
-              <li className="rounded-md border border-ink/10 bg-canvas-subtle/70 px-2 py-1.5">
-                Cinematic FPV tours of homes, hospitality, and gyms
-              </li>
-              <li className="rounded-md border border-ink/10 bg-canvas-subtle/70 px-2 py-1.5">
-                Branded drone clips for ads, campaigns, and promos
-              </li>
-              <li className="rounded-md border border-ink/10 bg-canvas-subtle/70 px-2 py-1.5">
-                Action footage for sport, automotive, and outdoor content
-              </li>
-              <li className="rounded-md border border-ink/10 bg-canvas-subtle/70 px-2 py-1.5">
-                Aerial photography for listings, press, and print
-              </li>
-            </ul>
+          <div className="mt-6 hidden lg:block">
+            <ContactIdeasSection />
+            {isModal ? (
+              <div className="mt-4 flex justify-start">
+                <PublicPicture
+                  webpSrc={FALLOW_BRAND_LOGO_WEBP}
+                  fallbackSrc={FALLOW_BRAND_LOGO_ASSET}
+                  alt=""
+                  ariaHidden
+                  className="h-[88px] w-[88px] rounded-[8px] object-contain"
+                  width={88}
+                  height={88}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+            ) : null}
           </div>
         </div>
 
@@ -222,6 +249,10 @@ export function ContactForm({
             {status === "error" ? (
               <p className="text-[14px] text-red-700">{error}</p>
             ) : null}
+          </div>
+
+          <div className="pt-6 lg:hidden">
+            <ContactIdeasSection />
           </div>
         </form>
       </div>
