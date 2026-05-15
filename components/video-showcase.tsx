@@ -8,6 +8,7 @@ import type { ShowcaseVideo } from "@/lib/types";
 import {
   formatPublishedDate,
   tiktokEmbedSrc,
+  youtubeEmbedSrc,
   youtubeThumbnailDisplayUrl,
 } from "@/lib/video-embed";
 
@@ -37,9 +38,12 @@ export function VideoShowcase({ youtube, tiktok, isLoading = false }: Props) {
   const [youtubeExtraPages, setYoutubeExtraPages] = useState(0);
   const [tiktokExtraPages, setTiktokExtraPages] = useState(0);
   const [shouldLoadTiktokPreview, setShouldLoadTiktokPreview] = useState(false);
+  const [shouldLoadYoutubePreview, setShouldLoadYoutubePreview] = useState(false);
   const [tiktokPreviewHost, setTiktokPreviewHost] = useState<HTMLDivElement | null>(
     null
   );
+  const [youtubePreviewHost, setYoutubePreviewHost] =
+    useState<HTMLDivElement | null>(null);
 
   const closeLightbox = useCallback(() => {
     setLightboxVideo(null);
@@ -47,13 +51,15 @@ export function VideoShowcase({ youtube, tiktok, isLoading = false }: Props) {
     setLightboxIndex(0);
   }, []);
 
+  const youtubePreview = safeYoutube[0];
+  const youtubeList = youtubePreview ? safeYoutube.slice(1) : [];
   const tiktokPreview = safeTiktok[0];
   const tiktokList = tiktokPreview ? safeTiktok.slice(1) : safeTiktok;
   const hasBothLists = safeYoutube.length > 0 && safeTiktok.length > 0;
   const baseVisibleCount = hasBothLists
     ? tiktokList.length === 0
-      ? safeYoutube.length
-      : Math.min(safeYoutube.length, tiktokList.length)
+      ? youtubeList.length
+      : Math.min(youtubeList.length, tiktokList.length)
     : 0;
   const pageSize = INITIAL_VISIBLE_MAX;
 
@@ -77,15 +83,28 @@ export function VideoShowcase({ youtube, tiktok, isLoading = false }: Props) {
     return () => observer.disconnect();
   }, [tiktokPreviewHost, shouldLoadTiktokPreview]);
 
+  useEffect(() => {
+    if (!youtubePreviewHost || shouldLoadYoutubePreview) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setShouldLoadYoutubePreview(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "180px 0px" }
+    );
+    observer.observe(youtubePreviewHost);
+    return () => observer.disconnect();
+  }, [youtubePreviewHost, shouldLoadYoutubePreview]);
+
   const youtubeInitialCap = hasBothLists
     ? Math.min(INITIAL_VISIBLE_MAX, baseVisibleCount)
-    : Math.min(INITIAL_VISIBLE_MAX, safeYoutube.length);
-  const youtubeVisibleCount = hasBothLists
-    ? Math.min(
-        safeYoutube.length,
-        youtubeInitialCap + youtubeExtraPages * pageSize
-      )
-    : Math.min(safeYoutube.length, youtubeInitialCap + youtubeExtraPages * pageSize);
+    : Math.min(INITIAL_VISIBLE_MAX, youtubeList.length);
+  const youtubeVisibleCount = Math.min(
+    youtubeList.length,
+    youtubeInitialCap + youtubeExtraPages * pageSize
+  );
 
   const tiktokInitialCap = hasBothLists
     ? Math.min(
@@ -103,9 +122,6 @@ export function VideoShowcase({ youtube, tiktok, isLoading = false }: Props) {
   const hasTiktok = safeTiktok.length > 0;
   const bothFeeds = hasYoutube && hasTiktok;
   const stretchLg = bothFeeds ? "lg:h-full lg:min-h-0" : "";
-  const listStackLg = bothFeeds
-    ? "mt-6 flex min-h-0 flex-1 flex-col lg:min-h-0"
-    : "mt-6 flex flex-col";
   const moreWrapClass = bothFeeds ? "mt-auto self-start pt-4" : "self-start pt-4";
   const canGoPrev = lightboxVideo !== null && lightboxIndex > 0;
   const canGoNext =
@@ -144,7 +160,8 @@ export function VideoShowcase({ youtube, tiktok, isLoading = false }: Props) {
       >
         <div className="flex min-w-0 flex-col">
           <h3 className={sectionLabel}>YouTube</h3>
-          <div className="mt-6 space-y-3">
+          <div className="mt-6 aspect-video max-w-[min(100%,920px)] animate-pulse rounded-[1.35rem] bg-ink/8" />
+          <div className="mt-8 space-y-3">
             <div className="h-[102px] animate-pulse rounded-2xl bg-ink/6" />
             <div className="h-[102px] animate-pulse rounded-2xl bg-ink/6" />
             <div className="h-[102px] animate-pulse rounded-2xl bg-ink/6" />
@@ -197,10 +214,85 @@ export function VideoShowcase({ youtube, tiktok, isLoading = false }: Props) {
           {hasYoutube ? (
           <div className={`showcase-col flex min-w-0 flex-col ${stretchLg}`}>
             <h3 className={sectionLabel}>YouTube</h3>
-            <div className={listStackLg}>
-              {safeYoutube.length > 0 ? (
+
+            {youtubePreview ? (
+              <div className="mt-6">
+                <div className="mx-auto max-w-[min(100%,920px)] overflow-hidden rounded-[1.35rem] bg-black shadow-soft ring-1 ring-ink/10">
+                  <div
+                    ref={setYoutubePreviewHost}
+                    className="relative aspect-video w-full bg-black"
+                  >
+                    {shouldLoadYoutubePreview ? (
+                      <iframe
+                        key={youtubePreview.id}
+                        title={youtubePreview.title}
+                        src={youtubeEmbedSrc(
+                          youtubePreview.id,
+                          false,
+                          false
+                        )}
+                        className="absolute inset-0 h-full w-full border-0"
+                        allow="encrypted-media; fullscreen; autoplay; picture-in-picture"
+                        allowFullScreen
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center bg-black text-[13px] text-white/75">
+                        Loading preview...
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="mx-auto mt-5 max-w-[min(100%,920px)]">
+                  {youtubePreview.id === AMBIENT_YOUTUBE_VIDEO_ID ? (
+                    <div className="mb-2 flex items-center gap-2">
+                      <span className="inline-flex rounded-full bg-ink/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-ink-muted">
+                        Background clip
+                      </span>
+                      <span
+                        aria-hidden
+                        className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-ink/10 text-[10px] text-ink-muted"
+                        title="Now in background"
+                      >
+                        ◌
+                      </span>
+                    </div>
+                  ) : null}
+                  <p className="line-clamp-5 text-[16px] font-medium leading-[1.45] tracking-[-0.012em] text-ink sm:line-clamp-6 sm:text-[17px]">
+                    {youtubePreview.title}
+                  </p>
+                  <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-[14px] text-ink-muted sm:text-[15px]">
+                    {youtubePreview.publishedAt ? (
+                      <span className="tabular-nums-date">
+                        {formatPublishedDate(youtubePreview.publishedAt)}
+                      </span>
+                    ) : null}
+                    <a
+                      href={youtubePreview.watchUrl}
+                      className="text-link transition-colors duration-180 hover:text-link-hover hover:underline hover:underline-offset-[3px]"
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      onClick={() =>
+                        trackEvent("outbound_link_click", {
+                          destination: "youtube",
+                          location: "youtube_featured_preview",
+                          video_id: youtubePreview.id,
+                        })
+                      }
+                    >
+                      Open in YouTube
+                    </a>
+                  </div>
+                </div>
+              </div>
+            ) : null}
+
+            <div
+              className={`${bothFeeds ? "flex min-h-0 flex-1 flex-col lg:min-h-0" : "flex flex-col"} ${youtubePreview ? "mt-8" : "mt-6"}`}
+            >
+              {youtubeList.length > 0 ? (
                 <ul className="flex flex-col gap-2">
-                  {safeYoutube.slice(0, youtubeVisibleCount).map((v, idx) => {
+                  {youtubeList.slice(0, youtubeVisibleCount).map((v, idx) => {
                     const isBackgroundClip = v.id === AMBIENT_YOUTUBE_VIDEO_ID;
                     return (
                     <li
@@ -221,7 +313,7 @@ export function VideoShowcase({ youtube, tiktok, isLoading = false }: Props) {
                             video_id: v.id,
                           });
                           openLightboxFromQueue(
-                            safeYoutube.slice(0, youtubeVisibleCount),
+                            youtubeList.slice(0, youtubeVisibleCount),
                             idx
                           );
                         }}
@@ -281,23 +373,25 @@ export function VideoShowcase({ youtube, tiktok, isLoading = false }: Props) {
                 </ul>
               ) : (
                 <p className="text-[15px] leading-relaxed text-ink-muted">
-                  No YouTube videos yet.
+                  {youtubePreview
+                    ? "No additional YouTube videos in the list."
+                    : "No YouTube videos yet."}
                 </p>
               )}
-              {youtubeVisibleCount < safeYoutube.length ? (
+              {youtubeVisibleCount < youtubeList.length ? (
                 <div className={moreWrapClass}>
                   <button
                     type="button"
                     onClick={() => {
                       trackEvent("video_list_expand", {
                         platform: "youtube",
-                        remaining: safeYoutube.length - youtubeVisibleCount,
+                        remaining: youtubeList.length - youtubeVisibleCount,
                       });
                       setYoutubeExtraPages((p) => p + 1);
                     }}
                     className="rounded-full border border-ink/15 bg-canvas-subtle/70 px-4 py-2 text-[13px] font-medium text-ink transition hover:bg-canvas-subtle"
                   >
-                    More ({safeYoutube.length - youtubeVisibleCount} remaining)
+                    More ({youtubeList.length - youtubeVisibleCount} remaining)
                   </button>
                 </div>
               ) : bothFeeds ? (
