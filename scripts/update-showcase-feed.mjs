@@ -13,7 +13,14 @@ const TIKTOK_JSON_URL =
   "https://raw.githubusercontent.com/chrisrpriceuk/feed/main/tiktok-feed.json";
 const MAX_ITEMS = Number(process.env.SHOWCASE_MAX_ITEMS || "24");
 const OUT_PATH = resolve(process.cwd(), "public", "showcase-feed.json");
-const OEMBED_BATCH_LIMIT = Number(process.env.TIKTOK_OEMBED_MAX || "24");
+/** Pause between each TikTok network step (oEmbed + image download) to reduce rate limits. */
+const TIKTOK_REQUEST_GAP_MS = Number(process.env.TIKTOK_REQUEST_GAP_MS || "160");
+const TIKTOK_THUMB_DIR = resolve(
+  process.cwd(),
+  "public",
+  "showcase-thumbs",
+  "tiktok"
+);
 
 function normalizeArray(v) {
   if (!v) return [];
@@ -25,23 +32,8 @@ function parseDate(input) {
   return Number.isNaN(d.getTime()) ? "" : d.toISOString();
 }
 
-function thumbnailExpiresAtEpoch(thumbnailUrl) {
-  if (!thumbnailUrl) return 0;
-  try {
-    const u = new URL(thumbnailUrl);
-    const exp = Number(u.searchParams.get("x-expires") || "0");
-    return Number.isFinite(exp) ? exp : 0;
-  } catch {
-    return 0;
-  }
-}
-
-function isThumbnailLikelyExpiredOrNearExpiry(thumbnailUrl) {
-  const expEpoch = thumbnailExpiresAtEpoch(thumbnailUrl);
-  if (!expEpoch) return false;
-  const nowEpoch = Math.floor(Date.now() / 1000);
-  // Refresh if already expired or will expire in under 3 days.
-  return expEpoch - nowEpoch < 3 * 24 * 60 * 60;
+function sleep(ms) {
+  return new Promise((r) => setTimeout(r, ms));
 }
 
 async function enrichTikTokThumbnail(video) {
@@ -64,19 +56,58 @@ async function enrichTikTokThumbnail(video) {
   }
 }
 
-async function refreshTikTokThumbnails(videos) {
-  const out = [];
-  let refreshed = 0;
-  for (const video of videos) {
-    if (
-      refreshed < OEMBED_BATCH_LIMIT &&
-      (isThumbnailLikelyExpiredOrNearExpiry(video.thumbnailUrl) || !video.thumbnailUrl)
-    ) {
-      out.push(await enrichTikTokThumbnail(video));
-      refreshed += 1;
-      continue;
+/**
+ * Persist thumbnail bytes under /public so the static site serves first-party URLs.
+ * TikTok CDN signed URLs expire / 403 for browsers; mirroring avoids that.
+ */
+async function mirrorTikTokThumbnailToPublic(video) {
+  const id = String(video?.id || "").trim();
+  const url = String(video?.thumbnailUrl || "").trim();
+  if (!id || !url || url.startsWith("/")) {
+    return video;
+  }
+  try {
+    const res = await fetch(url, {
+      headers: {
+        Accept: "image/avif,image/webp,image/*,*/*;q=0.8",
+        Referer: "https://www.tiktok.com/",
+        "User-Agent":
+          "Mozilla/5.0 (compatible; FallowFPV/1.0; +https://fallowfpv.com)",
+      },
+    });
+    if (!res.ok) {
+      process.stderr.write(
+        `TikTok thumbnail HTTP ${res.status} for id ${id} (keeping remote URL)\n`
+      );
+      return video;
     }
-    out.push(video);
+    const buf = Buffer.from(await res.arrayBuffer());
+    if (buf.length < 400) {
+      process.stderr.write(`TikTok thumbnail too small for id ${id}\n`);
+      return video;
+    }
+    const outPath = resolve(TIKTOK_THUMB_DIR, `${id}.jpg`);
+    await mkdir(dirname(outPath), { recursive: true });
+    await writeFile(outPath, buf);
+    return {
+      ...video,
+      thumbnailUrl: `/showcase-thumbs/tiktok/${id}.jpg`,
+    };
+  } catch (err) {
+    process.stderr.write(
+      `TikTok thumbnail mirror failed for ${id}: ${String(err?.message || err)}\n`
+    );
+    return video;
+  }
+}
+
+async function finalizeTikTokVideos(videos) {
+  const out = [];
+  for (let i = 0; i < videos.length; i += 1) {
+    if (i > 0) await sleep(TIKTOK_REQUEST_GAP_MS);
+    const enriched = await enrichTikTokThumbnail(videos[i]);
+    await sleep(TIKTOK_REQUEST_GAP_MS);
+    out.push(await mirrorTikTokThumbnailToPublic(enriched));
   }
   return out;
 }
@@ -173,7 +204,7 @@ async function fetchTiktokVideos() {
           }))
           .filter((v) => v.id && v.watchUrl)
           .slice(0, MAX_ITEMS);
-        return refreshTikTokThumbnails(normalized);
+        return finalizeTikTokVideos(normalized);
       }
     }
   } catch {
@@ -196,7 +227,7 @@ async function fetchTiktokVideos() {
       }))
       .filter((v) => v.id && v.watchUrl)
       .slice(0, MAX_ITEMS);
-    return refreshTikTokThumbnails(normalized);
+    return finalizeTikTokVideos(normalized);
   } catch {
     return [];
   }

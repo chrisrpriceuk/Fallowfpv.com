@@ -66,16 +66,30 @@ export default function HomePage() {
     let cancelled = false;
 
     async function loadFeed() {
-      const feedUrl =
-        process.env.NEXT_PUBLIC_SHOWCASE_FEED_URL?.trim() || "showcase-feed.json";
+      const primary = process.env.NEXT_PUBLIC_SHOWCASE_FEED_URL?.trim();
+      const fallback = `${window.location.origin}/showcase-feed.json`;
+      const candidates = primary ? [primary, fallback] : [fallback, "showcase-feed.json"];
+
       try {
-        const res = await fetch(feedUrl, { cache: "force-cache" });
-        if (!res.ok) return;
-        const json = (await res.json()) as {
-          youtube?: unknown;
-          tiktok?: unknown;
-        };
+        let json: { youtube?: unknown; tiktok?: unknown } | null = null;
+        for (const url of candidates) {
+          try {
+            const res = await fetch(url, { cache: "no-store" });
+            if (!res.ok) continue;
+            json = (await res.json()) as {
+              youtube?: unknown;
+              tiktok?: unknown;
+            };
+            break;
+          } catch {
+            continue;
+          }
+        }
         if (cancelled) return;
+        if (!json) {
+          setFeed({ youtube: [], tiktok: [] });
+          return;
+        }
         setFeed({
           youtube: normalizeFeedVideos(json.youtube, "youtube"),
           tiktok: normalizeFeedVideos(json.tiktok, "tiktok"),
