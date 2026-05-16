@@ -1,25 +1,15 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { AmbientYouTubeBackground } from "@/components/ambient-youtube-background";
 import { ContactForm } from "@/components/contact-form";
 import { PublicPicture } from "@/components/public-picture";
+import { ServicesModalPanel } from "@/components/services-modal-panel";
+import { SiteHeader } from "@/components/site-header";
 import { VideoShowcase } from "@/components/video-showcase";
 import { trackEvent } from "@/lib/analytics";
 import type { ShowcaseVideo } from "@/lib/types";
-import {
-  AMBIENT_YOUTUBE_VIDEO_ID,
-  FACEBOOK_URL,
-  TIKTOK_PROFILE_URL,
-  YOUTUBE_CHANNEL_URL,
-} from "@/lib/site";
-
-const social = [
-  { label: "YouTube", href: YOUTUBE_CHANNEL_URL },
-  { label: "TikTok", href: TIKTOK_PROFILE_URL },
-  { label: "Facebook", href: FACEBOOK_URL },
-] as const;
+import { AMBIENT_YOUTUBE_VIDEO_ID } from "@/lib/site";
 
 const A2COFC_BADGE_HREF = "https://uavhub.com/";
 const A2COFC_BADGE_ASSET = "/a2cofc-badge.png";
@@ -60,7 +50,26 @@ export default function HomePage() {
   const [isFeedLoading, setIsFeedLoading] = useState(true);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isArticleModalOpen, setIsArticleModalOpen] = useState(false);
+  const [isServicesModalOpen, setIsServicesModalOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+
+  const openContact = () => {
+    setIsArticleModalOpen(false);
+    setIsServicesModalOpen(false);
+    setIsContactModalOpen(true);
+  };
+
+  const openArticle = () => {
+    setIsContactModalOpen(false);
+    setIsServicesModalOpen(false);
+    setIsArticleModalOpen(true);
+  };
+
+  const openServices = () => {
+    setIsContactModalOpen(false);
+    setIsArticleModalOpen(false);
+    setIsServicesModalOpen(true);
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -112,11 +121,12 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    if (!isContactModalOpen && !isArticleModalOpen) return;
+    if (!isContactModalOpen && !isArticleModalOpen && !isServicesModalOpen) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setIsContactModalOpen(false);
         setIsArticleModalOpen(false);
+        setIsServicesModalOpen(false);
       }
     };
     const prevOverflow = document.body.style.overflow;
@@ -126,7 +136,7 @@ export default function HomePage() {
       document.body.style.overflow = prevOverflow;
       window.removeEventListener("keydown", onKey);
     };
-  }, [isContactModalOpen, isArticleModalOpen]);
+  }, [isContactModalOpen, isArticleModalOpen, isServicesModalOpen]);
 
   const ambientVideoId = useMemo(() => {
     const pinned = feed.youtube.find((v) => v.id === AMBIENT_YOUTUBE_VIDEO_ID)?.id;
@@ -149,94 +159,15 @@ export default function HomePage() {
       ) : null}
 
       <div className="site-layer relative z-10">
-        <header className="sticky top-0 z-20 border-b border-ink/10 bg-canvas/80 backdrop-blur-2xl backdrop-saturate-150">
-          <div className="mx-auto flex max-w-[84rem] flex-col gap-3 px-5 py-4 xl:flex-row xl:items-end xl:justify-between xl:gap-8 sm:px-10">
-            <Link
-              href="/"
-              className="inline-flex items-end justify-center gap-3 whitespace-nowrap text-[26px] font-semibold tracking-[-0.04em] text-ink transition-opacity duration-180 hover:opacity-70 sm:text-[30px] lg:text-[34px] xl:justify-start"
-            >
-              <PublicPicture
-                webpSrc={FALLOW_BRAND_LOGO_WEBP}
-                fallbackSrc={FALLOW_BRAND_LOGO_ASSET}
-                alt=""
-                ariaHidden
-                className="h-[68px] w-[68px] rounded-[8px] object-contain"
-                width={68}
-                height={68}
-                loading="eager"
-                decoding="async"
-              />
-              <span className="pb-1 leading-none">Chris - Fallow FPV</span>
-            </Link>
-            <nav className="grid grid-cols-2 items-center gap-x-5 gap-y-2 text-center text-[14px] font-medium tracking-[-0.012em] text-ink-muted sm:grid-cols-3 sm:text-[15px] xl:flex xl:flex-wrap xl:justify-end xl:gap-x-8">
-              <button
-                type="button"
-                className="transition-opacity duration-180 hover:opacity-70"
-                onClick={() => {
-                  trackEvent("open_contact_modal", { source: "header" });
-                  setIsContactModalOpen(true);
-                }}
-              >
-                Contact
-              </button>
-              <button
-                type="button"
-                className="transition-opacity duration-180 hover:opacity-70"
-                onClick={() => {
-                  trackEvent("open_behind_the_name_modal", { source: "header" });
-                  setIsArticleModalOpen(true);
-                }}
-              >
-                Behind the Name
-              </button>
-              {social.map((s) => (
-                <a
-                  key={s.href}
-                  className="transition-opacity duration-180 hover:opacity-70"
-                  href={s.href}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  onClick={() =>
-                    trackEvent("social_link_click", {
-                      platform: s.label.toLowerCase(),
-                      location: "header",
-                    })
-                  }
-                >
-                  {s.label}
-                </a>
-              ))}
-              <button
-                type="button"
-                className="relative mx-auto inline-flex h-8 w-[5.25rem] items-center rounded-full border border-ink/10 bg-canvas/75 p-1 text-[11px] font-semibold text-ink shadow-soft transition duration-180 hover:bg-canvas-subtle xl:mx-0"
-                onClick={toggleTheme}
-                aria-pressed={isDarkMode}
-                aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
-              >
-                <span
-                  className={`absolute left-2.5 z-10 transition-colors duration-180 ${
-                    isDarkMode ? "text-ink-muted" : "text-canvas"
-                  }`}
-                >
-                  Light
-                </span>
-                <span
-                  className={`absolute right-2.5 z-10 transition-colors duration-180 ${
-                    isDarkMode ? "text-canvas" : "text-ink-muted"
-                  }`}
-                >
-                  Dark
-                </span>
-                <span
-                  aria-hidden
-                  className={`relative z-0 h-6 w-[2.35rem] rounded-full bg-ink transition-transform duration-180 ${
-                    isDarkMode ? "translate-x-[2.15rem]" : "translate-x-0"
-                  }`}
-                />
-              </button>
-            </nav>
-          </div>
-        </header>
+        <SiteHeader
+          isDarkMode={isDarkMode}
+          onToggleTheme={toggleTheme}
+          contactMode="modal"
+          onOpenContact={openContact}
+          behindTheNameMode="modal"
+          onOpenBehindTheName={openArticle}
+          onOpenServices={openServices}
+        />
 
         <main>
           <section className="mx-auto max-w-[84rem] px-5 pb-8 pt-16 sm:px-10 sm:pt-24 sm:pb-10">
@@ -258,11 +189,21 @@ export default function HomePage() {
                   type="button"
                   onClick={() => {
                     trackEvent("open_contact_modal", { source: "hero_cta" });
-                    setIsContactModalOpen(true);
+                    openContact();
                   }}
                   className="rounded-full border border-ink/15 bg-canvas/70 px-5 py-2.5 text-[14px] font-semibold text-ink backdrop-blur-md transition hover:bg-canvas-subtle"
                 >
-                  Plan a shoot
+                  Get in touch
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    trackEvent("open_services_modal", { source: "hero" });
+                    openServices();
+                  }}
+                  className="rounded-full border border-ink/15 bg-canvas/70 px-5 py-2.5 text-[14px] font-semibold text-ink backdrop-blur-md transition hover:bg-canvas-subtle"
+                >
+                  Services
                 </button>
               </div>
             </div>
@@ -392,6 +333,33 @@ export default function HomePage() {
                 </p>
               </div>
               </div>
+            </div>
+          </div>
+        ) : null}
+
+        {isServicesModalOpen ? (
+          <div
+            className="fixed inset-0 z-[110] flex items-start justify-center overflow-y-auto p-3 py-5 sm:p-8"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Services"
+          >
+            <button
+              type="button"
+              className="absolute inset-0 bg-black/40 backdrop-blur-[3px] transition-colors duration-180 hover:bg-black/45"
+              onClick={() => setIsServicesModalOpen(false)}
+              aria-label="Close services"
+            />
+            <div className="relative z-10 w-full max-w-[min(100%,980px)] pb-6">
+              <button
+                type="button"
+                onClick={() => setIsServicesModalOpen(false)}
+                className="sticky left-full top-3 z-[120] -mb-8 mr-3 flex h-8 w-8 -translate-x-3 items-center justify-center rounded-full bg-black/30 text-[18px] leading-none text-white backdrop-blur-md transition-colors duration-180 hover:bg-black/45"
+                aria-label="Close"
+              >
+                ×
+              </button>
+              <ServicesModalPanel onPlanShoot={openContact} />
             </div>
           </div>
         ) : null}
