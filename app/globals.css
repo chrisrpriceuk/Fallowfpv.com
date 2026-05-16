@@ -52,13 +52,11 @@ input[type="date"] {
   --color-link-hover: 178 210 255;
 }
 
-@layer utilities {
-  .tabular-nums-date {
-    font-variant-numeric: tabular-nums;
-  }
+.tabular-nums-date {
+  font-variant-numeric: tabular-nums;
 }
 
-/* Structural fallbacks + defaults so the feed stays readable if utilities fail to load */
+/* Structural fallbacks so the feed stays readable if Tailwind utilities glitch */
 .site-root {
   position: relative;
   min-height: 100vh;
@@ -99,8 +97,6 @@ input[type="date"] {
     padding: 2.5rem;
   }
 }
-
-/* Column count at `lg` is controlled in `VideoShowcase` via Tailwind (one vs two feeds). */
 
 .showcase-col {
   min-width: 0;

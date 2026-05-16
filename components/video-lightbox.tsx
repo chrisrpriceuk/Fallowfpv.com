@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { trackEvent } from "@/lib/analytics";
 import type { ShowcaseVideo } from "@/lib/types";
 import {
@@ -29,13 +29,23 @@ export function VideoLightbox({
   totalCount: number;
 }) {
   const [tiktokReloadKey, setTiktokReloadKey] = useState(0);
+  const onCloseRef = useRef(onClose);
+  const onPrevRef = useRef(onPrev);
+  const onNextRef = useRef(onNext);
+  const canPrevRef = useRef(canPrev);
+  const canNextRef = useRef(canNext);
+  onCloseRef.current = onClose;
+  onPrevRef.current = onPrev;
+  onNextRef.current = onNext;
+  canPrevRef.current = canPrev;
+  canNextRef.current = canNext;
 
   useEffect(() => {
     if (!video) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-      if (e.key === "ArrowLeft" && canPrev) onPrev();
-      if (e.key === "ArrowRight" && canNext) onNext();
+      if (e.key === "Escape") onCloseRef.current();
+      if (e.key === "ArrowLeft" && canPrevRef.current) onPrevRef.current();
+      if (e.key === "ArrowRight" && canNextRef.current) onNextRef.current();
     };
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -44,7 +54,7 @@ export function VideoLightbox({
       document.body.style.overflow = prevOverflow;
       window.removeEventListener("keydown", onKey);
     };
-  }, [video, onClose, onPrev, onNext, canPrev, canNext]);
+  }, [video]);
 
   useEffect(() => {
     // Reset embed reload state when changing videos.
