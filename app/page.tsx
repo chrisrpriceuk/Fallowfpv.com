@@ -176,7 +176,7 @@ export default function HomePage() {
                 Professional Drone and FPV Pilot · United Kingdom
               </p>
               <h1 className="mt-5 text-[2.35rem] font-semibold leading-[1.07] tracking-[-0.036em] text-ink sm:text-[3.4rem] sm:leading-[1.04]">
-                Aerial vision, simply shown
+                Aerial vision, simply shown.
               </h1>
               <p className="mx-auto mt-6 max-w-[36rem] text-[19px] font-normal leading-[1.55] tracking-[-0.015em] text-ink-muted sm:text-[21px]">
                 FPV and drone filming for events, venues, brands,{" "}
