@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-13T17:48:26.958Z",
+  "updatedAt": "2026-06-13T21:40:37.676Z",
   "source": "github-action",
   "youtube": [
     {
@@ -124,6 +124,14 @@
     }
   ],
   "tiktok": [
+    {
+      "platform": "tiktok",
+      "id": "7650943501256969494",
+      "title": "Awesome flight out of Fairoaks airport today, out over Gatwick, Dunsf...",
+      "publishedAt": "2026-06-13T18:08:27.000Z",
+      "thumbnailUrl": "/showcase-thumbs/tiktok/7650943501256969494.jpg",
+      "watchUrl": "https://www.tiktok.com/@fallowfpv/video/7650943501256969494"
+    },
     {
       "platform": "tiktok",
       "id": "7638408185187011862",
@@ -307,14 +315,6 @@
       "publishedAt": "2023-07-02T15:27:12.000Z",
       "thumbnailUrl": "/showcase-thumbs/tiktok/7251243203083373851.jpg",
       "watchUrl": "https://www.tiktok.com/@fallowfpv/video/7251243203083373851"
-    },
-    {
-      "platform": "tiktok",
-      "id": "7247226991764573467",
-      "title": "Man down! #drone #fpv #fpvdrone #fpvfreestyle #fpvlife #iflight #nazg...",
-      "publishedAt": "2023-06-21T19:42:11.000Z",
-      "thumbnailUrl": "/showcase-thumbs/tiktok/7247226991764573467.jpg",
-      "watchUrl": "https://www.tiktok.com/@fallowfpv/video/7247226991764573467"
     }
   ]
 }
