@@ -1,7 +1,15 @@
 {
-  "updatedAt": "2026-06-20T17:50:19.171Z",
+  "updatedAt": "2026-06-20T21:41:49.399Z",
   "source": "github-action",
   "youtube": [
+    {
+      "platform": "youtube",
+      "id": "PWqXhtyCEcw",
+      "title": "South Berkshire Scouts Charity Golf Day 2026, At East Berkshire Golf Club",
+      "publishedAt": "2026-06-20T20:08:29.000Z",
+      "thumbnailUrl": "https://i1.ytimg.com/vi/PWqXhtyCEcw/hqdefault.jpg",
+      "watchUrl": "https://www.youtube.com/watch?v=PWqXhtyCEcw"
+    },
     {
       "platform": "youtube",
       "id": "Rw6a0jbVuI4",
@@ -113,14 +121,6 @@
       "publishedAt": "2024-05-29T23:55:12.000Z",
       "thumbnailUrl": "https://i2.ytimg.com/vi/Us7x_I5pFmU/hqdefault.jpg",
       "watchUrl": "https://www.youtube.com/shorts/Us7x_I5pFmU"
-    },
-    {
-      "platform": "youtube",
-      "id": "2_vewfPqNSQ",
-      "title": "FPV - Powerloop Gap - Hit it! #shorts #fpvfreestyle #fpv #fpvdrone #fpvlife #drone #quadcopter #dji",
-      "publishedAt": "2024-05-12T07:37:11.000Z",
-      "thumbnailUrl": "https://i3.ytimg.com/vi/2_vewfPqNSQ/hqdefault.jpg",
-      "watchUrl": "https://www.youtube.com/shorts/2_vewfPqNSQ"
     }
   ],
   "tiktok": [
