@@ -1,7 +1,128 @@
 {
-  "updatedAt": "2026-08-11T05:30:40.927Z",
+  "updatedAt": "2026-08-11T09:16:15.330Z",
   "source": "github-action",
-  "youtube": [],
+  "youtube": [
+    {
+      "platform": "youtube",
+      "id": "PWqXhtyCEcw",
+      "title": "South Berkshire Scouts Charity Golf Day 2026, At East Berkshire Golf Club",
+      "publishedAt": "2026-06-20T20:08:29.000Z",
+      "thumbnailUrl": "https://i1.ytimg.com/vi/PWqXhtyCEcw/hqdefault.jpg",
+      "watchUrl": "https://www.youtube.com/watch?v=PWqXhtyCEcw"
+    },
+    {
+      "platform": "youtube",
+      "id": "Rw6a0jbVuI4",
+      "title": "The South Berkshire District Scouts Charity Golf Event | May 2025 | East Berkshire Golf Club",
+      "publishedAt": "2026-05-01T17:40:25.000Z",
+      "thumbnailUrl": "https://i3.ytimg.com/vi/Rw6a0jbVuI4/hqdefault.jpg",
+      "watchUrl": "https://www.youtube.com/watch?v=Rw6a0jbVuI4"
+    },
+    {
+      "platform": "youtube",
+      "id": "oKxC2MgpKrQ",
+      "title": "Wing and Quad chasing with the Surrey FPV team",
+      "publishedAt": "2025-08-26T10:02:16.000Z",
+      "thumbnailUrl": "https://i4.ytimg.com/vi/oKxC2MgpKrQ/hqdefault.jpg",
+      "watchUrl": "https://www.youtube.com/watch?v=oKxC2MgpKrQ"
+    },
+    {
+      "platform": "youtube",
+      "id": "qKBYQ60eTlI",
+      "title": "Back to the farm Bando, FPV in the sun.  #fpvfreestyle #fpv #fpvdrone #fpvlife #drone #dji #bando",
+      "publishedAt": "2025-05-18T18:25:39.000Z",
+      "thumbnailUrl": "https://i2.ytimg.com/vi/qKBYQ60eTlI/hqdefault.jpg",
+      "watchUrl": "https://www.youtube.com/shorts/qKBYQ60eTlI"
+    },
+    {
+      "platform": "youtube",
+      "id": "ctRvha1dw5k",
+      "title": "Ripping the farm with the Tanq #fpv #fpvfreestyle #fpvdrone #fyp #drone #quadcopter #dji #bando",
+      "publishedAt": "2025-05-04T11:59:25.000Z",
+      "thumbnailUrl": "https://i4.ytimg.com/vi/ctRvha1dw5k/hqdefault.jpg",
+      "watchUrl": "https://www.youtube.com/shorts/ctRvha1dw5k"
+    },
+    {
+      "platform": "youtube",
+      "id": "sVcNvmgZFLA",
+      "title": "The Farm - FPV Bando Session #fpvfreestyle #fpv #fpvdrone #fpvlife #drone #quadcopter #dji #bando",
+      "publishedAt": "2025-04-13T10:44:52.000Z",
+      "thumbnailUrl": "https://i4.ytimg.com/vi/sVcNvmgZFLA/hqdefault.jpg",
+      "watchUrl": "https://www.youtube.com/watch?v=sVcNvmgZFLA"
+    },
+    {
+      "platform": "youtube",
+      "id": "VEQqhD2wlDA",
+      "title": "FPV - Bando Session #fpvfreestyle #fpv #fpvdrone #fpvlife #drone #quadcopter #dji #bando",
+      "publishedAt": "2025-03-23T15:46:31.000Z",
+      "thumbnailUrl": "https://i3.ytimg.com/vi/VEQqhD2wlDA/hqdefault.jpg",
+      "watchUrl": "https://www.youtube.com/watch?v=VEQqhD2wlDA"
+    },
+    {
+      "platform": "youtube",
+      "id": "QXTIS-kXlJY",
+      "title": "My last pack at Endor, the FPV Park, and now it's gone..",
+      "publishedAt": "2025-02-22T18:43:33.000Z",
+      "thumbnailUrl": "https://i2.ytimg.com/vi/QXTIS-kXlJY/hqdefault.jpg",
+      "watchUrl": "https://www.youtube.com/watch?v=QXTIS-kXlJY"
+    },
+    {
+      "platform": "youtube",
+      "id": "OUyQ4YWYcHk",
+      "title": "Chase FPV - Chasing a Lidl Glider #fpvfreestyle #fpv #fpvdrone #fpvlife #drone #quadcopter #dji",
+      "publishedAt": "2024-10-27T22:28:25.000Z",
+      "thumbnailUrl": "https://i4.ytimg.com/vi/OUyQ4YWYcHk/hqdefault.jpg",
+      "watchUrl": "https://www.youtube.com/watch?v=OUyQ4YWYcHk"
+    },
+    {
+      "platform": "youtube",
+      "id": "wNUrCBuQN9Q",
+      "title": "Bando FPV - Newark Priory Tanq2 #fpvfreestyle #fpv #fpvdrone #fpvlife #drone #quadcopter #dji #bando",
+      "publishedAt": "2024-10-13T17:00:45.000Z",
+      "thumbnailUrl": "https://i4.ytimg.com/vi/wNUrCBuQN9Q/hqdefault.jpg",
+      "watchUrl": "https://www.youtube.com/watch?v=wNUrCBuQN9Q"
+    },
+    {
+      "platform": "youtube",
+      "id": "fg-fwLjEry0",
+      "title": "FPV - Bando Session Tanq2 #fpvfreestyle #fpv #fpvdrone #fpvlife #drone #quadcopter #dji #bando",
+      "publishedAt": "2024-09-21T18:11:05.000Z",
+      "thumbnailUrl": "https://i3.ytimg.com/vi/fg-fwLjEry0/hqdefault.jpg",
+      "watchUrl": "https://www.youtube.com/watch?v=fg-fwLjEry0"
+    },
+    {
+      "platform": "youtube",
+      "id": "Nh534JPaxEs",
+      "title": "It was a chasey kind of FPV day",
+      "publishedAt": "2024-08-05T20:30:45.000Z",
+      "thumbnailUrl": "https://i3.ytimg.com/vi/Nh534JPaxEs/hqdefault.jpg",
+      "watchUrl": "https://www.youtube.com/watch?v=Nh534JPaxEs"
+    },
+    {
+      "platform": "youtube",
+      "id": "PhYmRokVdjE",
+      "title": "The South Berkshire District Scouts Charity Golf Event | May 2024 | East Berkshire Golf Club",
+      "publishedAt": "2024-06-11T14:47:21.000Z",
+      "thumbnailUrl": "https://i1.ytimg.com/vi/PhYmRokVdjE/hqdefault.jpg",
+      "watchUrl": "https://www.youtube.com/watch?v=PhYmRokVdjE"
+    },
+    {
+      "platform": "youtube",
+      "id": "edPQxfS2U28",
+      "title": "Treveth Lowen FPV Drone Flythough",
+      "publishedAt": "2024-06-08T15:00:39.000Z",
+      "thumbnailUrl": "https://i2.ytimg.com/vi/edPQxfS2U28/hqdefault.jpg",
+      "watchUrl": "https://www.youtube.com/watch?v=edPQxfS2U28"
+    },
+    {
+      "platform": "youtube",
+      "id": "Us7x_I5pFmU",
+      "title": "FPV TANQ2 - Powerlooping Gaps #shorts #fpvfreestyle #fpv #fpvdrone #fpvlife #drone #quadcopter #dji",
+      "publishedAt": "2024-05-29T23:55:12.000Z",
+      "thumbnailUrl": "https://i2.ytimg.com/vi/Us7x_I5pFmU/hqdefault.jpg",
+      "watchUrl": "https://www.youtube.com/shorts/Us7x_I5pFmU"
+    }
+  ],
   "tiktok": [
     {
       "platform": "tiktok",
